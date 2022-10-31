@@ -12,8 +12,8 @@ namespace MazurkaGameKit.FMODTools
     /// </summary>
     public class FMODSimpleAudioEmitter : FMODAudioEmitter, IFMODAudioEmitter
     {
-        [SerializeField] private bool killOlder = true;
-        [SerializeField] private FMOD.Studio.STOP_MODE stopMode;
+        [SerializeField] protected bool killOlder = true;
+        [SerializeField] protected FMOD.Studio.STOP_MODE stopMode;
 
         #region Interface
 
