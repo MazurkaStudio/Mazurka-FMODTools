@@ -70,12 +70,9 @@ namespace MazurkaGameKit.FMODTools
             return -1f;
         }
 
-        public static bool GetEventDescription(EventReference eventRef, out EventDescription eventDescription)
+        public static EventDescription GetEventDescription(EventReference eventRef)
         {
-            if (RuntimeManager.StudioSystem.getEvent(eventRef.Path, out eventDescription) == RESULT.OK)
-                return true;
-
-            return false;
+            return RuntimeManager.GetEventDescription(eventRef);
         }
 
         public static bool GetEventDescription(EventInstance eventInstance, out EventDescription eventDescription)
@@ -88,11 +85,7 @@ namespace MazurkaGameKit.FMODTools
 
         public static bool IsEvent3D(EventReference eventRef)
         {
-            bool is3D = false;
-
-            if (GetEventDescription(eventRef, out EventDescription descr))
-                descr.is3D(out is3D);
-
+            GetEventDescription(eventRef).is3D(out bool is3D);
             return is3D;
         }
 
