@@ -122,6 +122,12 @@ namespace MazurkaGameKit.FMODTools
         }
 
         #endregion
+
+        public void SetParameter(ParamRef parameter)
+        {
+            if (eventInstance.isValid())
+                eventInstance.setParameterByName(parameter.Name, parameter.Value);
+        }
     }
 
 }
