@@ -125,10 +125,11 @@ namespace MazurkaGameKit.FMODTools
 
         [SerializeField] private Transform overrrideSoundSource;
         [SerializeField] private bool canBePaused = true;
+        [SerializeField] protected bool canEmitSound = true;
 
         protected bool isInPause = false;
 
-        protected bool canEmitSound = true;
+
 
         #region Mono
 
@@ -149,6 +150,9 @@ namespace MazurkaGameKit.FMODTools
 
         public virtual void PlayOneShot(EventReference eventRef)
         {
+            if (!canEmitSound || isInPause)
+                return;
+
             if (FMODHelper.IsEvent3D(eventRef))
             {
                 FMODHelper.PlaySound_3D_OneShot(eventRef, gameObject);
@@ -163,6 +167,9 @@ namespace MazurkaGameKit.FMODTools
 
         public virtual void PlayOneShot(EventReference eventRef, ParamRef parameter)
         {
+            if (!canEmitSound || isInPause)
+                return;
+
             if (FMODHelper.IsEvent3D(eventRef))
             {
                 FMODHelper.PlaySound_3D_OneShot(eventRef, gameObject, parameter);
@@ -177,6 +184,9 @@ namespace MazurkaGameKit.FMODTools
 
         public virtual void PlayOneShot(EventReference eventRef, ParamRef[] parameters)
         {
+            if (!canEmitSound || isInPause)
+                return;
+
             if (FMODHelper.IsEvent3D(eventRef))
             {
                 FMODHelper.PlaySound_3D_OneShot(eventRef, gameObject, parameters);
@@ -189,9 +199,47 @@ namespace MazurkaGameKit.FMODTools
             OnSoundWasPlayed();
         }
 
+        public virtual void PlayOneShot(EventReference eventRef, ParamRef parameter, Vector3 atPos)
+        {
+            if (!canEmitSound || isInPause)
+                return;
+
+            if (FMODHelper.IsEvent3D(eventRef))
+            {
+                FMODHelper.PlaySound_3D_OneShot(eventRef, atPos, parameter);
+            }
+            else
+            {
+                FMODHelper.PlaySound_2D_OneShot(eventRef);
+            }
+
+            OnSoundWasPlayed();
+        }
+
+        public virtual void PlayOneShot(EventReference eventRef, ParamRef[] parameters, Vector3 atPos)
+        {
+            if (!canEmitSound || isInPause)
+                return;
+
+            if (FMODHelper.IsEvent3D(eventRef))
+            {
+                FMODHelper.PlaySound_3D_OneShot(eventRef, atPos, parameters);
+            }
+            else
+            {
+                FMODHelper.PlaySound_2D_OneShot(eventRef);
+            }
+
+            OnSoundWasPlayed();
+        }
+
+
 
         public virtual EventInstance PlaySound(EventReference eventRef)
         {
+            if (!canEmitSound || isInPause)
+                return default;
+
             EventInstance instance;
             if (FMODHelper.IsEvent3D(eventRef))
             {
@@ -210,6 +258,9 @@ namespace MazurkaGameKit.FMODTools
 
         public virtual EventInstance PlaySound(EventReference eventRef, ParamRef parameter)
         {
+            if (!canEmitSound || isInPause)
+                return default;
+
             EventInstance instance;
             if (FMODHelper.IsEvent3D(eventRef))
             {
@@ -227,6 +278,9 @@ namespace MazurkaGameKit.FMODTools
 
         public virtual EventInstance PlaySound(EventReference eventRef, ParamRef[] parameters)
         {
+            if (!canEmitSound || isInPause)
+                return default;
+
             EventInstance instance;
             if (FMODHelper.IsEvent3D(eventRef))
             {
@@ -242,18 +296,61 @@ namespace MazurkaGameKit.FMODTools
             return instance;
         }
 
+        public virtual EventInstance PlaySound(EventReference eventRef, ParamRef parameter, Vector3 atPos)
+        {
+            if (!canEmitSound || isInPause)
+                return default;
+
+            EventInstance instance;
+            if (FMODHelper.IsEvent3D(eventRef))
+            {
+                instance = FMODHelper.PlaySound_3D(eventRef, atPos, parameter);
+            }
+            else
+            {
+                instance = FMODHelper.PlaySound_2D(eventRef, parameter);
+            }
+
+            RegisterNewEventInstance(instance);
+            OnSoundWasPlayed(instance);
+            return instance;
+        }
+
+        public virtual EventInstance PlaySound(EventReference eventRef, ParamRef[] parameters, Vector3 atPos)
+        {
+            if (!canEmitSound || isInPause)
+                return default;
+
+            EventInstance instance;
+            if (FMODHelper.IsEvent3D(eventRef))
+            {
+                instance = FMODHelper.PlaySound_3D(eventRef, atPos, parameters);
+            }
+            else
+            {
+                instance = FMODHelper.PlaySound_2D(eventRef, parameters);
+            }
+
+            RegisterNewEventInstance(instance);
+            OnSoundWasPlayed(instance);
+            return instance;
+        }
 
         public virtual void SetParameter(EventInstance eventInstance, ParamRef parameter)
         {
-            eventInstance.setParameterByName(parameter.Name, parameter.Value);
+            if(eventInstance.isValid())
+                eventInstance.setParameterByName(parameter.Name, parameter.Value);
         }
 
         public virtual void SetParameter(EventInstance eventInstance, ParamRef[] parameters)
         {
-            foreach(ParamRef parameter in parameters)
+            if (eventInstance.isValid())
             {
-                eventInstance.setParameterByName(parameter.Name, parameter.Value);
-            }
+                foreach (ParamRef parameter in parameters)
+                {
+                    eventInstance.setParameterByName(parameter.Name, parameter.Value);
+                }
+            }              
         }
 
 
