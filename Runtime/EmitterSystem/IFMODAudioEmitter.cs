@@ -60,7 +60,7 @@ namespace MazurkaGameKit.FMODTools
 
         #region Getters
 
-        public Transform GetSoundEmitter { get; }
+        public GameObject GetSoundEmitter { get; }
 
         public bool IsInPause { get; }
 

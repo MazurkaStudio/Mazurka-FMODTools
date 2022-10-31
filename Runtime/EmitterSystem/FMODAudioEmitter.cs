@@ -8,7 +8,7 @@ using static UnityEditor.PlayerSettings;
 
 public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 {
-    [SerializeField] protected Transform overrrideSoundSource;
+    [SerializeField] protected GameObject overrrideSoundSource;
     [SerializeField] protected bool canBePaused = true;
     [SerializeField] protected bool canEmitSound = true;
 
@@ -33,7 +33,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 
     #endregion
 
-    public virtual Transform GetSoundEmitter => overrrideSoundSource == null ? transform : overrrideSoundSource;
+    public virtual GameObject GetSoundEmitter => overrrideSoundSource == null ? gameObject : overrrideSoundSource;
 
     public virtual bool IsInPause => isInPause;
 
@@ -89,7 +89,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
     {
         if (!CanPlayNewSound()) return false;
 
-        FMODHelper.PlaySound_OneShot(eventRef, gameObject);
+        FMODHelper.PlaySound_OneShot(eventRef, GetSoundEmitter);
 
         OnSoundWasPlayed();
 
@@ -100,7 +100,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
     {
         if (!CanPlayNewSound()) return false;
 
-        FMODHelper.PlaySound_OneShot(eventRef, gameObject, parameter);
+        FMODHelper.PlaySound_OneShot(eventRef, GetSoundEmitter, parameter);
 
         OnSoundWasPlayed();
 
@@ -111,7 +111,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
     {
         if (!CanPlayNewSound()) return false;
 
-        FMODHelper.PlaySound_OneShot(eventRef, gameObject, parameters);
+        FMODHelper.PlaySound_OneShot(eventRef, GetSoundEmitter, parameters);
 
         OnSoundWasPlayed();
 
@@ -148,7 +148,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 
         if (!CanPlayNewSound()) return false;
 
-        FMODHelper.PlaySound(eventRef, gameObject);
+        FMODHelper.PlaySound(eventRef, GetSoundEmitter);
 
         RegisterNewEventInstance(instance);
         OnSoundWasPlayed(instance);
@@ -162,7 +162,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 
         if (!CanPlayNewSound()) return false;
 
-        FMODHelper.PlaySound(eventRef, gameObject, parameter);
+        FMODHelper.PlaySound(eventRef, GetSoundEmitter, parameter);
 
         RegisterNewEventInstance(instance);
         OnSoundWasPlayed(instance);
@@ -176,7 +176,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 
         if (!CanPlayNewSound()) return false;
 
-        FMODHelper.PlaySound(eventRef, gameObject, parameters);
+        FMODHelper.PlaySound(eventRef, GetSoundEmitter, parameters);
 
         RegisterNewEventInstance(instance);
         OnSoundWasPlayed(instance);
@@ -252,6 +252,9 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
         OnSoundWillPaused(instance);
         instance.setPaused(value);
     }
+
+
+    public virtual void SetNewSourceTransform(GameObject source) => overrrideSoundSource = source;
 
     #endregion
 
