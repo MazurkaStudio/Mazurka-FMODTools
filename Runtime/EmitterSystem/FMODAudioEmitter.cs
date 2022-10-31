@@ -146,7 +146,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 
         if (!CanPlayNewSound()) return false;
 
-        FMODHelper.PlaySound(eventRef, GetSoundEmitter);
+        instance = FMODHelper.PlaySound(eventRef, GetSoundEmitter);
 
         RegisterNewEventInstance(instance);
         OnSoundWasPlayed(instance);
@@ -160,7 +160,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 
         if (!CanPlayNewSound()) return false;
 
-        FMODHelper.PlaySound(eventRef, GetSoundEmitter, parameter);
+        instance = FMODHelper.PlaySound(eventRef, GetSoundEmitter, parameter);
 
         RegisterNewEventInstance(instance);
         OnSoundWasPlayed(instance);
@@ -174,7 +174,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 
         if (!CanPlayNewSound()) return false;
 
-        FMODHelper.PlaySound(eventRef, GetSoundEmitter, parameters);
+        instance = FMODHelper.PlaySound(eventRef, GetSoundEmitter, parameters);
 
         RegisterNewEventInstance(instance);
         OnSoundWasPlayed(instance);
@@ -188,7 +188,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 
         if (!CanPlayNewSound()) return false;
 
-        FMODHelper.PlaySound(eventRef, atPos, parameter);
+        instance = FMODHelper.PlaySound(eventRef, atPos, parameter);
 
         RegisterNewEventInstance(instance);
         OnSoundWasPlayed(instance);
@@ -202,7 +202,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 
         if (!CanPlayNewSound()) return false;
 
-        FMODHelper.PlaySound(eventRef, atPos, parameters);
+        instance = FMODHelper.PlaySound(eventRef, atPos, parameters);
 
         RegisterNewEventInstance(instance);
         OnSoundWasPlayed(instance);

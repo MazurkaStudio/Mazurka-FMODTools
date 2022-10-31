@@ -35,12 +35,10 @@ namespace MazurkaGameKit.FMODTools
                 return;
 
             if (killOlder)
-            {
                 if (this.eventInstance.isValid())
                     this.eventInstance.stop(stopMode);
 
-                this.eventInstance = eventInstance;
-            }
+            this.eventInstance = eventInstance;
         }
 
         public override void UnregisterNewEventInstance(EventInstance eventInstance) { this.eventInstance = default; }
