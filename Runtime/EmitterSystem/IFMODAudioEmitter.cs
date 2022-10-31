@@ -66,6 +66,8 @@ namespace MazurkaGameKit.FMODTools
 
         public bool IsInPause { get; }
 
+        public bool CanEmitSound { get; }
+
         #endregion
     }
 }

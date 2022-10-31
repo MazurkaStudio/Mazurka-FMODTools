@@ -62,6 +62,24 @@ namespace MazurkaGameKit.FMODTools
 
         public bool IsInPause => isInPause;
 
+        public bool CanEmitSound
+        {
+            get
+            {
+                return canEmitSound;
+            }
+            set
+            {
+                if(canEmitSound != value)
+                {
+                    if(!value)
+                    {
+                        StopAllEventInstance();
+                    }
+                }
+            }
+        }
+
         public virtual void StopAllEventInstance(bool allowFadeOut = true)
         {
             FMOD.Studio.STOP_MODE stopMode = allowFadeOut ? FMOD.Studio.STOP_MODE.ALLOWFADEOUT : FMOD.Studio.STOP_MODE.IMMEDIATE;
@@ -109,6 +127,8 @@ namespace MazurkaGameKit.FMODTools
         [SerializeField] private bool canBePaused = true;
 
         protected bool isInPause = false;
+
+        protected bool canEmitSound = true;
 
         #region Mono
 
