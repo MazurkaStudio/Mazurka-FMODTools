@@ -29,7 +29,7 @@ namespace MazurkaGameKit.FMODTools
         {
             foreach (IFMODAudioEmitter emitter in allActiveEmitters)
             {
-                emitter.PauseAllEventInstance(value);
+                emitter.PauseEmitter(value);
             }
         }
 
@@ -37,7 +37,7 @@ namespace MazurkaGameKit.FMODTools
         {
             foreach (IFMODAudioEmitter emitter in allActiveEmitters)
             {
-                emitter.StopAllEventInstance();
+                emitter.StopEmitter();
             }
         }
     }

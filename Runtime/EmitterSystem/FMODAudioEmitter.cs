@@ -1,412 +1,297 @@
 using FMOD.Studio;
 using FMODUnity;
+using MazurkaGameKit.FMODTools;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
-namespace MazurkaGameKit.FMODTools
+public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 {
-    /// <summary>
-    /// Base class to use audio emitter in static emitter event system
-    /// </summary>
-    public class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
+    [SerializeField] protected Transform overrrideSoundSource;
+    [SerializeField] protected bool canBePaused = true;
+    [SerializeField] protected bool canEmitSound = true;
+
+    #region Interface
+
+    #region Emitter Registration
+
+    public abstract void RegisterEmitter();
+
+    public abstract void UnregisterEmitter();
+
+    #endregion
+
+    #region Event Instances Registration
+
+
+    public abstract void RegisterNewEventInstance(EventInstance eventInstance);
+
+    public abstract void UnregisterNewEventInstance(EventInstance eventInstance);
+
+    public abstract void RefreshEventsInstances();
+
+    #endregion
+
+    public virtual Transform GetSoundEmitter => overrrideSoundSource == null ? transform : overrrideSoundSource;
+
+    public virtual bool IsInPause => isInPause;
+
+    public virtual bool CanEmitSound
     {
-        #region Interface
-
-        #region Emitter Registration
-
-        public virtual void RegisterEmitter() => FMODAudioEmitterManager.Register(this);
-
-        public virtual void UnregisterEmitter() => FMODAudioEmitterManager.Unregister(this);
-
-        #endregion
-
-        #region Event Instances Registration
-
-        public List<EventInstance> GetEventInstances => eventInstances;
-
-        protected List<EventInstance> eventInstances = new List<EventInstance>();
-
-        public virtual void RegisterNewEventInstance(EventInstance eventInstance)
+        get
         {
-            if (!eventInstance.isValid())
-                return;
-
-            if (eventInstances.Contains(eventInstance))
-                return;
-
-            eventInstances.Add(eventInstance);
+            return canEmitSound;
         }
-
-        public virtual void UnregisterNewEventInstance(EventInstance eventInstance)
+        set
         {
-            if (!eventInstances.Contains(eventInstance))
-                return;
-
-            eventInstances.Remove(eventInstance);
-        }
-
-        public void RefreshEventsInstances()
-        {
-            for (int i = eventInstances.Count - 1; i >= 0; i--)
+            if (canEmitSound != value)
             {
-                if (!eventInstances[i].isValid())
+                if (!value)
                 {
-                    eventInstances.RemoveAt(i);
+                    StopEmitter();
                 }
             }
         }
-
-        #endregion
-
-        public Transform GetSoundEmitter => overrrideSoundSource == null ? transform : overrrideSoundSource;
-
-        public bool IsInPause => isInPause;
-
-        public bool CanEmitSound
-        {
-            get
-            {
-                return canEmitSound;
-            }
-            set
-            {
-                if(canEmitSound != value)
-                {
-                    if(!value)
-                    {
-                        StopAllEventInstance();
-                    }
-                }
-            }
-        }
-
-        public virtual void StopAllEventInstance(bool allowFadeOut = true)
-        {
-            FMOD.Studio.STOP_MODE stopMode = allowFadeOut ? FMOD.Studio.STOP_MODE.ALLOWFADEOUT : FMOD.Studio.STOP_MODE.IMMEDIATE;
-
-            foreach (EventInstance instances in eventInstances)
-            {
-                StopSound(instances, stopMode);
-            }
-
-            eventInstances.Clear();
-        }
-
-        public virtual void PauseAllEventInstance(bool value)
-        {
-            if (canBePaused)
-            {
-                isInPause = value;
-
-                RefreshEventsInstances();
-
-                if (value)
-                {
-                    foreach (EventInstance instances in eventInstances)
-                    {
-                        OnSoundWillPaused(instances);
-                        instances.setPaused(value);
-                    }
-                }
-                else
-                {
-                    foreach (EventInstance instances in eventInstances)
-                    {
-                        instances.setPaused(value);
-                        OnSoundWasResumed(instances);
-                    }
-                }
-                   
-            }
-        }
-
-        #endregion
-
-
-        [SerializeField] private Transform overrrideSoundSource;
-        [SerializeField] private bool canBePaused = true;
-        [SerializeField] protected bool canEmitSound = true;
-
-        protected bool isInPause = false;
-
-
-
-        #region Mono
-
-        protected virtual void Start()
-        {
-            RegisterEmitter();
-        }
-
-        protected virtual void OnDestroy()
-        {
-            StopAllEventInstance();
-            UnregisterEmitter();
-        }
-
-        #endregion
-
-        #region Utility
-
-        public virtual void PlayOneShot(EventReference eventRef)
-        {
-            if (!canEmitSound || isInPause)
-                return;
-
-            if (FMODHelper.IsEvent3D(eventRef))
-            {
-                FMODHelper.PlaySound_3D_OneShot(eventRef, gameObject);
-            }
-            else
-            {
-                FMODHelper.PlaySound_2D_OneShot(eventRef);
-            }
-
-            OnSoundWasPlayed();
-        }
-
-        public virtual void PlayOneShot(EventReference eventRef, ParamRef parameter)
-        {
-            if (!canEmitSound || isInPause)
-                return;
-
-            if (FMODHelper.IsEvent3D(eventRef))
-            {
-                FMODHelper.PlaySound_3D_OneShot(eventRef, gameObject, parameter);
-            }
-            else
-            {
-                FMODHelper.PlaySound_2D_OneShot(eventRef);
-            }
-
-            OnSoundWasPlayed();
-        }
-
-        public virtual void PlayOneShot(EventReference eventRef, ParamRef[] parameters)
-        {
-            if (!canEmitSound || isInPause)
-                return;
-
-            if (FMODHelper.IsEvent3D(eventRef))
-            {
-                FMODHelper.PlaySound_3D_OneShot(eventRef, gameObject, parameters);
-            }
-            else
-            {
-                FMODHelper.PlaySound_2D_OneShot(eventRef);
-            }
-
-            OnSoundWasPlayed();
-        }
-
-        public virtual void PlayOneShot(EventReference eventRef, ParamRef parameter, Vector3 atPos)
-        {
-            if (!canEmitSound || isInPause)
-                return;
-
-            if (FMODHelper.IsEvent3D(eventRef))
-            {
-                FMODHelper.PlaySound_3D_OneShot(eventRef, atPos, parameter);
-            }
-            else
-            {
-                FMODHelper.PlaySound_2D_OneShot(eventRef);
-            }
-
-            OnSoundWasPlayed();
-        }
-
-        public virtual void PlayOneShot(EventReference eventRef, ParamRef[] parameters, Vector3 atPos)
-        {
-            if (!canEmitSound || isInPause)
-                return;
-
-            if (FMODHelper.IsEvent3D(eventRef))
-            {
-                FMODHelper.PlaySound_3D_OneShot(eventRef, atPos, parameters);
-            }
-            else
-            {
-                FMODHelper.PlaySound_2D_OneShot(eventRef);
-            }
-
-            OnSoundWasPlayed();
-        }
-
-
-
-        public virtual EventInstance PlaySound(EventReference eventRef)
-        {
-            if (!canEmitSound || isInPause)
-                return default;
-
-            EventInstance instance;
-            if (FMODHelper.IsEvent3D(eventRef))
-            {
-                instance = FMODHelper.PlaySound_3D(eventRef, gameObject);
- 
-            }
-            else
-            {
-                instance = FMODHelper.PlaySound_2D(eventRef);
-            }
-
-            RegisterNewEventInstance(instance);
-            OnSoundWasPlayed(instance);
-            return instance;
-        }
-
-        public virtual EventInstance PlaySound(EventReference eventRef, ParamRef parameter)
-        {
-            if (!canEmitSound || isInPause)
-                return default;
-
-            EventInstance instance;
-            if (FMODHelper.IsEvent3D(eventRef))
-            {
-                instance = FMODHelper.PlaySound_3D(eventRef, gameObject, parameter);
-            }
-            else
-            {
-                instance = FMODHelper.PlaySound_2D(eventRef, parameter);
-            }
-
-            RegisterNewEventInstance(instance);
-            OnSoundWasPlayed(instance);
-            return instance;
-        }
-
-        public virtual EventInstance PlaySound(EventReference eventRef, ParamRef[] parameters)
-        {
-            if (!canEmitSound || isInPause)
-                return default;
-
-            EventInstance instance;
-            if (FMODHelper.IsEvent3D(eventRef))
-            {
-                instance = FMODHelper.PlaySound_3D(eventRef, gameObject, parameters);
-            }
-            else
-            {
-                instance = FMODHelper.PlaySound_2D(eventRef, parameters);
-            }
-
-            RegisterNewEventInstance(instance);
-            OnSoundWasPlayed(instance);
-            return instance;
-        }
-
-        public virtual EventInstance PlaySound(EventReference eventRef, ParamRef parameter, Vector3 atPos)
-        {
-            if (!canEmitSound || isInPause)
-                return default;
-
-            EventInstance instance;
-            if (FMODHelper.IsEvent3D(eventRef))
-            {
-                instance = FMODHelper.PlaySound_3D(eventRef, atPos, parameter);
-            }
-            else
-            {
-                instance = FMODHelper.PlaySound_2D(eventRef, parameter);
-            }
-
-            RegisterNewEventInstance(instance);
-            OnSoundWasPlayed(instance);
-            return instance;
-        }
-
-        public virtual EventInstance PlaySound(EventReference eventRef, ParamRef[] parameters, Vector3 atPos)
-        {
-            if (!canEmitSound || isInPause)
-                return default;
-
-            EventInstance instance;
-            if (FMODHelper.IsEvent3D(eventRef))
-            {
-                instance = FMODHelper.PlaySound_3D(eventRef, atPos, parameters);
-            }
-            else
-            {
-                instance = FMODHelper.PlaySound_2D(eventRef, parameters);
-            }
-
-            RegisterNewEventInstance(instance);
-            OnSoundWasPlayed(instance);
-            return instance;
-        }
-
-        public virtual void SetParameter(EventInstance eventInstance, ParamRef parameter)
-        {
-            if(eventInstance.isValid())
-                eventInstance.setParameterByName(parameter.Name, parameter.Value);
-        }
-
-        public virtual void SetParameter(EventInstance eventInstance, ParamRef[] parameters)
-        {
-            if (eventInstance.isValid())
-            {
-                foreach (ParamRef parameter in parameters)
-                {
-                    eventInstance.setParameterByName(parameter.Name, parameter.Value);
-                }
-            }              
-        }
-
-
-        public virtual void StopSound(EventInstance instance, FMOD.Studio.STOP_MODE stopMode = FMOD.Studio.STOP_MODE.ALLOWFADEOUT)
-        {
-            if (!instance.isValid())
-                return;
-
-           OnSoundWillStopped(instance);
-            instance.stop(stopMode);
-        }
-
-        public virtual void PauseSound(EventInstance instance, bool value)
-        {
-            if (!instance.isValid())
-            {
-                if (eventInstances.Contains(instance))
-                    eventInstances.Remove(instance);
-            }
-
-
-            OnSoundWillPaused(instance);
-            instance.setPaused(value);
-        }
-
-        #endregion
-
-        #region Callbacks
-
-        public virtual void OnSoundWasPlayed()
-        {
-
-        }
-
-        public virtual void OnSoundWasPlayed(EventInstance instance)
-        {
-
-        }
-
-        public virtual void OnSoundWillStopped(EventInstance instance)
-        {
-
-        }
-
-        public virtual void OnSoundWillPaused(EventInstance instance)
-        {
-
-        }
-
-        public virtual void OnSoundWasResumed(EventInstance instance)
-        {
-
-        }
-
-        #endregion
     }
 
-}
+    protected bool isInPause = false;
 
+    public abstract void PauseEmitter(bool value);
+
+    public abstract void StopEmitter(bool allowFadeOut = true);
+
+    #endregion
+
+    public virtual bool CanPlayNewSound()
+    {
+        if (!canEmitSound || isInPause)
+            return false;
+
+        return true;
+    }
+
+    protected virtual void Start()
+    {
+        RegisterEmitter();
+    }
+
+    protected virtual void OnDestroy()
+    {
+        StopEmitter();
+        UnregisterEmitter();
+    }
+
+
+    #region Utility
+
+    public virtual bool PlayOneShot(EventReference eventRef)
+    {
+        if (!CanPlayNewSound()) return false;
+
+        if (FMODHelper.IsEvent3D(eventRef)) FMODHelper.PlaySound_3D_OneShot(eventRef, gameObject);
+        else FMODHelper.PlaySound_2D_OneShot(eventRef);
+
+        OnSoundWasPlayed();
+
+        return true;
+    }
+
+    public virtual bool PlayOneShot(EventReference eventRef, ParamRef parameter)
+    {
+        if (!CanPlayNewSound()) return false;
+
+        if (FMODHelper.IsEvent3D(eventRef)) FMODHelper.PlaySound_3D_OneShot(eventRef, gameObject, parameter);
+        else FMODHelper.PlaySound_2D_OneShot(eventRef);
+
+        OnSoundWasPlayed();
+
+        return true;
+    }
+
+    public virtual bool PlayOneShot(EventReference eventRef, ParamRef[] parameters)
+    {
+        if (!CanPlayNewSound()) return false;
+
+        if (FMODHelper.IsEvent3D(eventRef)) FMODHelper.PlaySound_3D_OneShot(eventRef, gameObject, parameters);
+        else FMODHelper.PlaySound_2D_OneShot(eventRef);
+
+        OnSoundWasPlayed();
+
+        return true;
+    }
+
+    public virtual bool PlayOneShot(EventReference eventRef, ParamRef parameter, Vector3 atPos)
+    {
+        if (!CanPlayNewSound()) return false;
+
+        if (FMODHelper.IsEvent3D(eventRef)) FMODHelper.PlaySound_3D_OneShot(eventRef, atPos, parameter);
+        else FMODHelper.PlaySound_2D_OneShot(eventRef);
+
+        OnSoundWasPlayed();
+
+        return true;
+    }
+
+    public virtual bool PlayOneShot(EventReference eventRef, ParamRef[] parameters, Vector3 atPos)
+    {
+        if (!CanPlayNewSound()) return false;
+
+        if (FMODHelper.IsEvent3D(eventRef)) FMODHelper.PlaySound_3D_OneShot(eventRef, atPos, parameters);
+        else FMODHelper.PlaySound_2D_OneShot(eventRef);
+
+        OnSoundWasPlayed();
+
+        return true;
+    }
+
+
+
+    public virtual bool PlaySound(EventReference eventRef, out EventInstance instance)
+    {
+        instance = default;
+
+        if (!CanPlayNewSound()) return false;
+
+        if (FMODHelper.IsEvent3D(eventRef)) instance = FMODHelper.PlaySound_3D(eventRef, gameObject);
+        else instance = FMODHelper.PlaySound_2D(eventRef);
+
+        RegisterNewEventInstance(instance);
+        OnSoundWasPlayed(instance);
+
+        return true;
+    }
+
+    public virtual bool PlaySound(EventReference eventRef, ParamRef parameter, out EventInstance instance)
+    {
+        instance = default;
+
+        if (!CanPlayNewSound()) return false;
+
+        if (FMODHelper.IsEvent3D(eventRef)) instance = FMODHelper.PlaySound_3D(eventRef, gameObject, parameter);
+        else instance = FMODHelper.PlaySound_2D(eventRef, parameter);
+
+        RegisterNewEventInstance(instance);
+        OnSoundWasPlayed(instance);
+
+        return true;
+    }
+
+    public virtual bool PlaySound(EventReference eventRef, ParamRef[] parameters, out EventInstance instance)
+    {
+        instance = default;
+
+        if (!CanPlayNewSound()) return false;
+
+        if (FMODHelper.IsEvent3D(eventRef)) instance = FMODHelper.PlaySound_3D(eventRef, gameObject, parameters);
+        else instance = FMODHelper.PlaySound_2D(eventRef, parameters);
+
+        RegisterNewEventInstance(instance);
+        OnSoundWasPlayed(instance);
+
+        return true;
+    }
+
+    public virtual bool PlaySound(EventReference eventRef, ParamRef parameter, Vector3 atPos, out EventInstance instance)
+    {
+        instance = default;
+
+        if (!CanPlayNewSound()) return false;
+
+        if (FMODHelper.IsEvent3D(eventRef)) instance = FMODHelper.PlaySound_3D(eventRef, atPos, parameter);
+        else instance = FMODHelper.PlaySound_2D(eventRef, parameter);
+
+        RegisterNewEventInstance(instance);
+        OnSoundWasPlayed(instance);
+
+        return true;
+    }
+
+    public virtual bool PlaySound(EventReference eventRef, ParamRef[] parameters, Vector3 atPos, out EventInstance instance)
+    {
+        instance = default;
+
+        if (!CanPlayNewSound()) return false;
+
+        if (FMODHelper.IsEvent3D(eventRef)) instance = FMODHelper.PlaySound_3D(eventRef, atPos, parameters);
+        else instance = FMODHelper.PlaySound_2D(eventRef, parameters);
+
+        RegisterNewEventInstance(instance);
+        OnSoundWasPlayed(instance);
+
+        return true;
+    }
+
+
+
+    public virtual void SetParameter(EventInstance eventInstance, ParamRef parameter)
+    {
+        if (eventInstance.isValid())
+            eventInstance.setParameterByName(parameter.Name, parameter.Value);
+    }
+
+    public virtual void SetParameter(EventInstance eventInstance, ParamRef[] parameters)
+    {
+        if (eventInstance.isValid())
+        {
+            foreach (ParamRef parameter in parameters)
+            {
+                eventInstance.setParameterByName(parameter.Name, parameter.Value);
+            }
+        }
+    }
+
+
+
+    public virtual void StopSound(EventInstance instance, FMOD.Studio.STOP_MODE stopMode = FMOD.Studio.STOP_MODE.ALLOWFADEOUT)
+    {
+        if (!instance.isValid())
+            return;
+
+        UnregisterNewEventInstance(instance);
+        OnSoundWillStopped(instance);
+        instance.stop(stopMode);
+    }
+
+    public virtual void PauseSound(EventInstance instance, bool value)
+    {
+        if (!instance.isValid())
+            return;
+
+        isInPause = value;
+        OnSoundWillPaused(instance);
+        instance.setPaused(value);
+    }
+
+    #endregion
+
+
+    #region Callbacks
+
+    public virtual void OnSoundWasPlayed()
+    {
+
+    }
+
+    public virtual void OnSoundWasPlayed(EventInstance instance)
+    {
+
+    }
+
+    public virtual void OnSoundWillStopped(EventInstance instance)
+    {
+
+    }
+
+    public virtual void OnSoundWillPaused(EventInstance instance)
+    {
+
+    }
+
+    public virtual void OnSoundWasResumed(EventInstance instance)
+    {
+
+    }
+
+    #endregion
+}

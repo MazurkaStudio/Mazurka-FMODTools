@@ -325,7 +325,7 @@ namespace MazurkaGameKit.FMODTools
 
         }
 
-        //With Parameters
+
 
         public static EventInstance PlaySound_2D(EventReference eventRef, ParamRef parameter, bool ignoreKeepSpeed = false)
         {
@@ -478,7 +478,7 @@ namespace MazurkaGameKit.FMODTools
     /// Use for triggering FMOD event from monobehavior events
     /// </summary>
     [System.Serializable]
-    public enum MonobehaviourEvents
+    public enum StartSoundEvent
     {
         OnEnable, OnStart, OnDisable, Custom
     }

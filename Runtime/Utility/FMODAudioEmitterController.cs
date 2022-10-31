@@ -12,18 +12,18 @@ namespace MazurkaGameKit.FMODTools
 
     public class FMODAudioEmitterController : MonoBehaviour
     {
-        [SerializeField] protected FMODAudioEmitter emitter;
+        [SerializeField] protected FMODComplexAudioEmitter emitter;
         [SerializeField] protected EventReference eventRef;
 
-        [SerializeField] protected MonobehaviourEvents startOn = MonobehaviourEvents.Custom;
-        [SerializeField] protected MonobehaviourEvents stopOn = MonobehaviourEvents.Custom;
-        [SerializeField] protected MonobehaviourEvents pauseOn = MonobehaviourEvents.Custom;
+        [SerializeField] protected StartSoundEvent startOn = StartSoundEvent.Custom;
+        [SerializeField] protected StartSoundEvent stopOn = StartSoundEvent.Custom;
+        [SerializeField] protected StartSoundEvent pauseOn = StartSoundEvent.Custom;
         [Tooltip("If instance not exist, resume will start the event")]
-        [SerializeField] protected MonobehaviourEvents resumeOn = MonobehaviourEvents.Custom;
-        [SerializeField] protected MonobehaviourEvents setParameterOn = MonobehaviourEvents.Custom;
-        [SerializeField] protected MonobehaviourEvents stopAllOn = MonobehaviourEvents.Custom;
-        [SerializeField] protected MonobehaviourEvents pauseAllOn = MonobehaviourEvents.Custom;
-        [SerializeField] protected MonobehaviourEvents resumeAllOn = MonobehaviourEvents.Custom;
+        [SerializeField] protected StartSoundEvent resumeOn = StartSoundEvent.Custom;
+        [SerializeField] protected StartSoundEvent setParameterOn = StartSoundEvent.Custom;
+        [SerializeField] protected StartSoundEvent stopAllOn = StartSoundEvent.Custom;
+        [SerializeField] protected StartSoundEvent pauseAllOn = StartSoundEvent.Custom;
+        [SerializeField] protected StartSoundEvent resumeAllOn = StartSoundEvent.Custom;
 
 
 
@@ -41,7 +41,7 @@ namespace MazurkaGameKit.FMODTools
         {
             if(emitter == null)
             {
-                emitter = GetComponent<FMODAudioEmitter>();
+                emitter = GetComponent<FMODComplexAudioEmitter>();
             }
         } 
 
@@ -50,12 +50,14 @@ namespace MazurkaGameKit.FMODTools
             if(playWithParameters)
             {
                 if (isOnShot) emitter.PlayOneShot(eventRef, parameters);
-                else eventInstance = emitter.PlaySound(eventRef, parameters);
+                else if (emitter.PlaySound(eventRef, parameters, out EventInstance eventInstance))
+                    this.eventInstance = eventInstance;
             }
             else
             {
                 if (isOnShot) emitter.PlayOneShot(eventRef);
-                else eventInstance = emitter.PlaySound(eventRef);
+                else if (emitter.PlaySound(eventRef, out EventInstance eventInstance))
+                    this.eventInstance = eventInstance;
             }
         }
 
@@ -83,17 +85,17 @@ namespace MazurkaGameKit.FMODTools
 
         public void StopAllEvent()
         {
-            emitter.StopAllEventInstance(stopAllMode == FMOD.Studio.STOP_MODE.ALLOWFADEOUT ? true : false);
+            emitter.StopEmitter(stopAllMode == FMOD.Studio.STOP_MODE.ALLOWFADEOUT ? true : false);
         }
 
         public void PauseAllEvent()
         {
-            emitter.PauseAllEventInstance(true);
+            emitter.PauseEmitter(true);
         }
 
         public void ResumeAllEvent()
         {
-            emitter.PauseAllEventInstance(false);
+            emitter.PauseEmitter(false);
         }
 
 
@@ -105,41 +107,41 @@ namespace MazurkaGameKit.FMODTools
 
         protected virtual void Start()
         {
-            if(startOn == MonobehaviourEvents.OnStart) StartEvent();
-            if(stopOn == MonobehaviourEvents.OnStart) StopEvent();
-            if(pauseOn == MonobehaviourEvents.OnStart) PauseEvent();
-            if(resumeOn == MonobehaviourEvents.OnStart) ResumeEvent();
-            if(setParameterOn == MonobehaviourEvents.OnStart) SetParameter();
+            if(startOn == StartSoundEvent.OnStart) StartEvent();
+            if(stopOn == StartSoundEvent.OnStart) StopEvent();
+            if(pauseOn == StartSoundEvent.OnStart) PauseEvent();
+            if(resumeOn == StartSoundEvent.OnStart) ResumeEvent();
+            if(setParameterOn == StartSoundEvent.OnStart) SetParameter();
 
-            if(stopAllOn == MonobehaviourEvents.OnStart) StopAllEvent();
-            if(pauseAllOn == MonobehaviourEvents.OnStart) PauseAllEvent();
-            if(resumeAllOn == MonobehaviourEvents.OnStart) ResumeAllEvent();
+            if(stopAllOn == StartSoundEvent.OnStart) StopAllEvent();
+            if(pauseAllOn == StartSoundEvent.OnStart) PauseAllEvent();
+            if(resumeAllOn == StartSoundEvent.OnStart) ResumeAllEvent();
         }
 
         protected virtual void OnEnable()
         {
-            if (startOn == MonobehaviourEvents.OnEnable) StartEvent();
-            if (stopOn == MonobehaviourEvents.OnEnable) StopEvent();
-            if (pauseOn == MonobehaviourEvents.OnEnable) PauseEvent();
-            if (resumeOn == MonobehaviourEvents.OnEnable) ResumeEvent();
-            if (setParameterOn == MonobehaviourEvents.OnEnable) SetParameter(); 
+            if (startOn == StartSoundEvent.OnEnable) StartEvent();
+            if (stopOn == StartSoundEvent.OnEnable) StopEvent();
+            if (pauseOn == StartSoundEvent.OnEnable) PauseEvent();
+            if (resumeOn == StartSoundEvent.OnEnable) ResumeEvent();
+            if (setParameterOn == StartSoundEvent.OnEnable) SetParameter(); 
             
-            if (stopAllOn == MonobehaviourEvents.OnEnable) StopAllEvent();
-            if (pauseAllOn == MonobehaviourEvents.OnEnable) PauseAllEvent();
-            if (resumeAllOn == MonobehaviourEvents.OnEnable) ResumeAllEvent();
+            if (stopAllOn == StartSoundEvent.OnEnable) StopAllEvent();
+            if (pauseAllOn == StartSoundEvent.OnEnable) PauseAllEvent();
+            if (resumeAllOn == StartSoundEvent.OnEnable) ResumeAllEvent();
         }
 
         protected virtual void OnDisable()
         {
-            if (startOn == MonobehaviourEvents.OnDisable) StartEvent();
-            if (stopOn == MonobehaviourEvents.OnDisable) StopEvent();
-            if (pauseOn == MonobehaviourEvents.OnDisable) PauseEvent();
-            if (resumeOn == MonobehaviourEvents.OnDisable) ResumeEvent();
-            if (setParameterOn == MonobehaviourEvents.OnDisable) SetParameter(); 
+            if (startOn == StartSoundEvent.OnDisable) StartEvent();
+            if (stopOn == StartSoundEvent.OnDisable) StopEvent();
+            if (pauseOn == StartSoundEvent.OnDisable) PauseEvent();
+            if (resumeOn == StartSoundEvent.OnDisable) ResumeEvent();
+            if (setParameterOn == StartSoundEvent.OnDisable) SetParameter(); 
             
-            if (stopAllOn == MonobehaviourEvents.OnDisable) StopAllEvent();
-            if (pauseAllOn == MonobehaviourEvents.OnDisable) PauseAllEvent();
-            if (resumeAllOn == MonobehaviourEvents.OnDisable) ResumeAllEvent();
+            if (stopAllOn == StartSoundEvent.OnDisable) StopAllEvent();
+            if (pauseAllOn == StartSoundEvent.OnDisable) PauseAllEvent();
+            if (resumeAllOn == StartSoundEvent.OnDisable) ResumeAllEvent();
         }
 
         protected virtual void OnDestroy()

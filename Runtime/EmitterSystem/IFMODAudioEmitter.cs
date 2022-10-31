@@ -46,16 +46,14 @@ namespace MazurkaGameKit.FMODTools
         /// </summary>
         public void RefreshEventsInstances();
 
-        public List<EventInstance> GetEventInstances {get;}
-
         #endregion
 
 
         #region Global emitter events
 
-        public void PauseAllEventInstance(bool value);
+        public void PauseEmitter(bool value);
 
-        public void StopAllEventInstance(bool allowFadeOut = true);
+        public void StopEmitter(bool allowFadeOut = true);
 
         #endregion
 
