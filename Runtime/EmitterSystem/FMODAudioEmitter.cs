@@ -89,8 +89,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
     {
         if (!CanPlayNewSound()) return false;
 
-        if (FMODHelper.IsEvent3D(eventRef)) FMODHelper.PlaySound_3D_OneShot(eventRef, gameObject);
-        else FMODHelper.PlaySound_2D_OneShot(eventRef);
+        FMODHelper.PlaySound_OneShot(eventRef, gameObject);
 
         OnSoundWasPlayed();
 
@@ -101,8 +100,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
     {
         if (!CanPlayNewSound()) return false;
 
-        if (FMODHelper.IsEvent3D(eventRef)) FMODHelper.PlaySound_3D_OneShot(eventRef, gameObject, parameter);
-        else FMODHelper.PlaySound_2D_OneShot(eventRef);
+        FMODHelper.PlaySound_OneShot(eventRef, gameObject, parameter);
 
         OnSoundWasPlayed();
 
@@ -113,8 +111,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
     {
         if (!CanPlayNewSound()) return false;
 
-        if (FMODHelper.IsEvent3D(eventRef)) FMODHelper.PlaySound_3D_OneShot(eventRef, gameObject, parameters);
-        else FMODHelper.PlaySound_2D_OneShot(eventRef);
+        FMODHelper.PlaySound_OneShot(eventRef, gameObject, parameters);
 
         OnSoundWasPlayed();
 
@@ -125,8 +122,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
     {
         if (!CanPlayNewSound()) return false;
 
-        if (FMODHelper.IsEvent3D(eventRef)) FMODHelper.PlaySound_3D_OneShot(eventRef, atPos, parameter);
-        else FMODHelper.PlaySound_2D_OneShot(eventRef);
+        FMODHelper.PlaySound_OneShot(eventRef, atPos, parameter);
 
         OnSoundWasPlayed();
 
@@ -137,8 +133,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
     {
         if (!CanPlayNewSound()) return false;
 
-        if (FMODHelper.IsEvent3D(eventRef)) FMODHelper.PlaySound_3D_OneShot(eventRef, atPos, parameters);
-        else FMODHelper.PlaySound_2D_OneShot(eventRef);
+        FMODHelper.PlaySound_OneShot(eventRef, atPos, parameters);
 
         OnSoundWasPlayed();
 
@@ -153,8 +148,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 
         if (!CanPlayNewSound()) return false;
 
-        if (FMODHelper.IsEvent3D(eventRef)) instance = FMODHelper.PlaySound_3D(eventRef, gameObject);
-        else instance = FMODHelper.PlaySound_2D(eventRef);
+        FMODHelper.PlaySound(eventRef, gameObject);
 
         RegisterNewEventInstance(instance);
         OnSoundWasPlayed(instance);
@@ -168,8 +162,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 
         if (!CanPlayNewSound()) return false;
 
-        if (FMODHelper.IsEvent3D(eventRef)) instance = FMODHelper.PlaySound_3D(eventRef, gameObject, parameter);
-        else instance = FMODHelper.PlaySound_2D(eventRef, parameter);
+        FMODHelper.PlaySound(eventRef, gameObject, parameter);
 
         RegisterNewEventInstance(instance);
         OnSoundWasPlayed(instance);
@@ -183,8 +176,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 
         if (!CanPlayNewSound()) return false;
 
-        if (FMODHelper.IsEvent3D(eventRef)) instance = FMODHelper.PlaySound_3D(eventRef, gameObject, parameters);
-        else instance = FMODHelper.PlaySound_2D(eventRef, parameters);
+        FMODHelper.PlaySound(eventRef, gameObject, parameters);
 
         RegisterNewEventInstance(instance);
         OnSoundWasPlayed(instance);
@@ -198,8 +190,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 
         if (!CanPlayNewSound()) return false;
 
-        if (FMODHelper.IsEvent3D(eventRef)) instance = FMODHelper.PlaySound_3D(eventRef, atPos, parameter);
-        else instance = FMODHelper.PlaySound_2D(eventRef, parameter);
+        FMODHelper.PlaySound(eventRef, atPos, parameter);
 
         RegisterNewEventInstance(instance);
         OnSoundWasPlayed(instance);
@@ -213,8 +204,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 
         if (!CanPlayNewSound()) return false;
 
-        if (FMODHelper.IsEvent3D(eventRef)) instance = FMODHelper.PlaySound_3D(eventRef, atPos, parameters);
-        else instance = FMODHelper.PlaySound_2D(eventRef, parameters);
+        FMODHelper.PlaySound(eventRef, atPos, parameters);
 
         RegisterNewEventInstance(instance);
         OnSoundWasPlayed(instance);

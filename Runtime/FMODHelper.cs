@@ -113,6 +113,84 @@ namespace MazurkaGameKit.FMODTools
 
         #region One Shot
 
+        public static void PlaySound_OneShot(EventReference eventRef, GameObject source)
+        {
+            if (IsEvent3D(eventRef))
+            {
+                PlaySound_3D_OneShot(eventRef, source);
+            }
+            else
+            {
+                PlaySound_2D_OneShot(eventRef);
+            }
+        }
+
+        public static void PlaySound_OneShot(EventReference eventRef, Vector3 source)
+        {
+            if (IsEvent3D(eventRef))
+            {
+                PlaySound_3D_OneShot(eventRef, source);
+            }
+            else
+            {
+                PlaySound_2D_OneShot(eventRef);
+            }
+        }
+
+
+        public static void PlaySound_OneShot(EventReference eventRef, GameObject source, ParamRef parameter, bool ignoreKeepSpeed = false)
+        {
+            if (IsEvent3D(eventRef))
+            {
+                PlaySound_3D_OneShot(eventRef, source, parameter, ignoreKeepSpeed);
+            }
+            else
+            {
+                PlaySound_2D_OneShot(eventRef, parameter, ignoreKeepSpeed);
+            }
+        }
+
+        public static void PlaySound_OneShot(EventReference eventRef, GameObject source, ParamRef[] parameters, bool ignoreKeepSpeed = false)
+        {
+            if (IsEvent3D(eventRef))
+            {
+                PlaySound_3D_OneShot(eventRef, source, parameters, ignoreKeepSpeed);
+            }
+            else
+            {
+                PlaySound_2D_OneShot(eventRef, parameters, ignoreKeepSpeed);
+            }
+        }
+
+
+        public static void PlaySound_OneShot(EventReference eventRef, Vector3 source, ParamRef parameter, bool ignoreKeepSpeed = false)
+        {
+            if (IsEvent3D(eventRef))
+            {
+                PlaySound_3D_OneShot(eventRef, source, parameter, ignoreKeepSpeed);
+            }
+            else
+            {
+                PlaySound_2D_OneShot(eventRef, parameter, ignoreKeepSpeed);
+            }
+        }
+
+        public static void PlaySound_OneShot(EventReference eventRef, Vector3 source, ParamRef[] parameters, bool ignoreKeepSpeed = false)
+        {
+            if (IsEvent3D(eventRef))
+            {
+                PlaySound_3D_OneShot(eventRef, source, parameters, ignoreKeepSpeed);
+            }
+            else
+            {
+                PlaySound_2D_OneShot(eventRef, parameters, ignoreKeepSpeed);
+            }
+        }
+
+
+
+
+
         public static void PlaySound_2D_OneShot(EventReference eventRef)
         {
             if (eventRef.IsNull)
@@ -155,7 +233,6 @@ namespace MazurkaGameKit.FMODTools
 
         }
 
-        //With Parameters
 
         public static void PlaySound_2D_OneShot(EventReference eventRef, ParamRef parameter, bool ignoreKeepSpeed = false)
         {
@@ -275,6 +352,83 @@ namespace MazurkaGameKit.FMODTools
 
         #region Instance
 
+        public static EventInstance PlaySound(EventReference eventRef, GameObject source)
+        {
+            if (IsEvent3D(eventRef))
+            {
+                return PlaySound_3D(eventRef, source);
+            }
+            else
+            {
+                return PlaySound_2D(eventRef);
+            }
+        }
+
+        public static EventInstance PlaySound(EventReference eventRef, Vector3 source)
+        {
+            if (IsEvent3D(eventRef))
+            {
+                return PlaySound_3D(eventRef, source);
+            }
+            else
+            {
+                return PlaySound_2D(eventRef);
+            }
+        }
+
+
+        public static EventInstance PlaySound(EventReference eventRef, GameObject source, ParamRef parameter, bool ignoreKeepSpeed = false)
+        {
+            if (IsEvent3D(eventRef))
+            {
+                return PlaySound_3D(eventRef, source, parameter, ignoreKeepSpeed);
+            }
+            else
+            {
+                return PlaySound_2D(eventRef, parameter, ignoreKeepSpeed);
+            }
+        }
+
+        public static EventInstance PlaySound(EventReference eventRef, GameObject source, ParamRef[] parameters, bool ignoreKeepSpeed = false)
+        {
+            if (IsEvent3D(eventRef))
+            {
+                return PlaySound_3D(eventRef, source, parameters, ignoreKeepSpeed);
+            }
+            else
+            {
+                return PlaySound_2D(eventRef, parameters, ignoreKeepSpeed);
+            }
+        }
+
+
+        public static EventInstance PlaySound(EventReference eventRef, Vector3 source, ParamRef parameter, bool ignoreKeepSpeed = false)
+        {
+            if (IsEvent3D(eventRef))
+            {
+                return PlaySound_3D(eventRef, source, parameter, ignoreKeepSpeed);
+            }
+            else
+            {
+                return PlaySound_2D(eventRef, parameter, ignoreKeepSpeed);
+            }
+        }
+
+        public static EventInstance PlaySound(EventReference eventRef, Vector3 source, ParamRef[] parameters, bool ignoreKeepSpeed = false)
+        {
+            if (IsEvent3D(eventRef))
+            {
+                return PlaySound_3D(eventRef, source, parameters, ignoreKeepSpeed);
+            }
+            else
+            {
+                return PlaySound_2D(eventRef, parameters, ignoreKeepSpeed);
+            }
+        }
+
+
+
+
         public static EventInstance PlaySound_2D(EventReference eventRef)
         {
             if (eventRef.IsNull)
@@ -289,7 +443,6 @@ namespace MazurkaGameKit.FMODTools
             eventInstance.start();
             return eventInstance;
         }
-
 
         public static EventInstance PlaySound_3D(EventReference eventRef, Vector3 position)
         {
@@ -324,7 +477,6 @@ namespace MazurkaGameKit.FMODTools
             return eventInstance;
 
         }
-
 
 
         public static EventInstance PlaySound_2D(EventReference eventRef, ParamRef parameter, bool ignoreKeepSpeed = false)

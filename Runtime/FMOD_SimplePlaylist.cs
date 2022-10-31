@@ -135,14 +135,7 @@ namespace MazurkaGameKit.FMODTools
             currentEventRef = playlist[CurrentEventIndex];
             RuntimeManager.GetEventDescription(currentEventRef).is3D(out bool is3D);
 
-            if (is3D)
-            {
-                currentEventInstance = FMODHelper.PlaySound_3D(currentEventRef, soundSource.gameObject);
-            }
-            else
-            {
-                currentEventInstance = FMODHelper.PlaySound_2D(currentEventRef);
-            }
+            currentEventInstance = FMODHelper.PlaySound(currentEventRef, soundSource.gameObject);
 
             IsPlaying = true;
             IsWaiting = false;
