@@ -1,10 +1,8 @@
 using FMOD.Studio;
 using FMODUnity;
 using MazurkaGameKit.FMODTools;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
+
 
 public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 {
