@@ -17,7 +17,6 @@ namespace MazurkaGameKit.FMODTools
 
 
         [Header("SETTINGS--------------------------------------------------------------------------------------------")]
-        [SerializeField] protected bool soundIs3D;
         [SerializeField] protected bool loop;
         [SerializeField] protected bool randomize;  
         [SerializeField] protected FMOD.Studio.STOP_MODE stopMode;
@@ -134,8 +133,9 @@ namespace MazurkaGameKit.FMODTools
         protected void StartCurrentEvent()
         {
             currentEventRef = playlist[CurrentEventIndex];
+            RuntimeManager.GetEventDescription(currentEventRef).is3D(out bool is3D);
 
-            if (soundIs3D)
+            if (is3D)
             {
                 currentEventInstance = FMODHelper.PlaySound_3D(currentEventRef, soundSource.gameObject);
             }
