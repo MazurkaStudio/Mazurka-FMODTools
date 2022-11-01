@@ -9,6 +9,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
     [SerializeField] protected GameObject overrrideSoundSource;
     [SerializeField] protected bool canBePaused = true;
     [SerializeField] protected bool canEmitSound = true;
+    [SerializeField] protected bool stopSoundOnDestroy = true;
 
     #region Interface
 
@@ -76,7 +77,9 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 
     protected virtual void OnDestroy()
     {
-        StopEmitter();
+        if(stopSoundOnDestroy)
+            StopEmitter();
+
         UnregisterEmitter();
     }
 
