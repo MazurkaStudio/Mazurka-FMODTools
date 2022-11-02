@@ -50,6 +50,8 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
                 {
                     StopEmitter();
                 }
+
+                canEmitSound = value;
             }
         }
     }
