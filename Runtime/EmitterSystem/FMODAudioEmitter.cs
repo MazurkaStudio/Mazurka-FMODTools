@@ -92,55 +92,65 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
     {
         if (!CanPlayNewSound()) return false;
 
-        FMODHelper.PlaySound_OneShot(eventRef, GetSoundEmitter);
+        if (FMODHelper.PlaySound_OneShot(eventRef, GetSoundEmitter))
+        {
+            OnSoundWasPlayed();
+            return true;
+        }
 
-        OnSoundWasPlayed();
-
-        return true;
+        return false;
     }
 
     public virtual bool PlayOneShot(EventReference eventRef, ParamRef parameter)
     {
         if (!CanPlayNewSound()) return false;
 
-        FMODHelper.PlaySound_OneShot(eventRef, GetSoundEmitter, parameter);
+        if (FMODHelper.PlaySound_OneShot(eventRef, GetSoundEmitter, parameter))
+        {
+            OnSoundWasPlayed();
+            return true;
+        }
 
-        OnSoundWasPlayed();
-
-        return true;
+        return false;
     }
 
     public virtual bool PlayOneShot(EventReference eventRef, ParamRef[] parameters)
     {
         if (!CanPlayNewSound()) return false;
 
-        FMODHelper.PlaySound_OneShot(eventRef, GetSoundEmitter, parameters);
+        if (FMODHelper.PlaySound_OneShot(eventRef, GetSoundEmitter, parameters))
+        {
+            OnSoundWasPlayed();
+            return true;
+        }
 
-        OnSoundWasPlayed();
-
-        return true;
+        return false;
     }
 
     public virtual bool PlayOneShot(EventReference eventRef, ParamRef parameter, Vector3 atPos)
     {
         if (!CanPlayNewSound()) return false;
 
-        FMODHelper.PlaySound_OneShot(eventRef, atPos, parameter);
+        if (FMODHelper.PlaySound_OneShot(eventRef, atPos, parameter))
+        {
+            OnSoundWasPlayed();
+            return true;
+        }
 
-        OnSoundWasPlayed();
-
-        return true;
+        return false;
     }
 
     public virtual bool PlayOneShot(EventReference eventRef, ParamRef[] parameters, Vector3 atPos)
     {
         if (!CanPlayNewSound()) return false;
 
-        FMODHelper.PlaySound_OneShot(eventRef, atPos, parameters);
+        if (FMODHelper.PlaySound_OneShot(eventRef, atPos, parameters))
+        {
+            OnSoundWasPlayed();
+            return true;
+        }
 
-        OnSoundWasPlayed();
-
-        return true;
+        return false;
     }
 
 
@@ -151,12 +161,15 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 
         if (!CanPlayNewSound()) return false;
 
-        instance = FMODHelper.PlaySound(eventRef, GetSoundEmitter);
+        if (FMODHelper.PlaySound(eventRef, GetSoundEmitter, out instance))
+        {
+            RegisterNewEventInstance(instance);
+            OnSoundWasPlayed(instance);
 
-        RegisterNewEventInstance(instance);
-        OnSoundWasPlayed(instance);
+            return true;
+        }
 
-        return true;
+        return false;
     }
 
     public virtual bool PlaySound(EventReference eventRef, ParamRef parameter, out EventInstance instance)
@@ -165,12 +178,15 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 
         if (!CanPlayNewSound()) return false;
 
-        instance = FMODHelper.PlaySound(eventRef, GetSoundEmitter, parameter);
+        if(FMODHelper.PlaySound(eventRef, GetSoundEmitter, parameter, out instance))
+        {
+            RegisterNewEventInstance(instance);
+            OnSoundWasPlayed(instance);
 
-        RegisterNewEventInstance(instance);
-        OnSoundWasPlayed(instance);
+            return true;
+        }
 
-        return true;
+        return false;
     }
 
     public virtual bool PlaySound(EventReference eventRef, ParamRef[] parameters, out EventInstance instance)
@@ -179,12 +195,15 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 
         if (!CanPlayNewSound()) return false;
 
-        instance = FMODHelper.PlaySound(eventRef, GetSoundEmitter, parameters);
+        if(FMODHelper.PlaySound(eventRef, GetSoundEmitter, parameters, out instance))
+        {
+            RegisterNewEventInstance(instance);
+            OnSoundWasPlayed(instance);
 
-        RegisterNewEventInstance(instance);
-        OnSoundWasPlayed(instance);
+            return true;
+        }
 
-        return true;
+        return false;
     }
 
     public virtual bool PlaySound(EventReference eventRef, ParamRef parameter, Vector3 atPos, out EventInstance instance)
@@ -193,12 +212,15 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 
         if (!CanPlayNewSound()) return false;
 
-        instance = FMODHelper.PlaySound(eventRef, atPos, parameter);
+       if(FMODHelper.PlaySound(eventRef, atPos, parameter, out instance))
+        {
+            RegisterNewEventInstance(instance);
+            OnSoundWasPlayed(instance);
 
-        RegisterNewEventInstance(instance);
-        OnSoundWasPlayed(instance);
+            return true;
+        }
 
-        return true;
+        return false;
     }
 
     public virtual bool PlaySound(EventReference eventRef, ParamRef[] parameters, Vector3 atPos, out EventInstance instance)
@@ -207,12 +229,15 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 
         if (!CanPlayNewSound()) return false;
 
-        instance = FMODHelper.PlaySound(eventRef, atPos, parameters);
+        if(FMODHelper.PlaySound(eventRef, atPos, parameters, out instance))
+        {
+            RegisterNewEventInstance(instance);
+            OnSoundWasPlayed(instance);
 
-        RegisterNewEventInstance(instance);
-        OnSoundWasPlayed(instance);
+            return true;
+        }
 
-        return true;
+        return false;
     }
 
 

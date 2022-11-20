@@ -133,13 +133,18 @@ namespace MazurkaGameKit.FMODTools
         protected void StartCurrentEvent()
         {
             currentEventRef = playlist[CurrentEventIndex];
-            RuntimeManager.GetEventDescription(currentEventRef).is3D(out bool is3D);
-
-            currentEventInstance = FMODHelper.PlaySound(currentEventRef, soundSource.gameObject);
-
-            IsPlaying = true;
-            IsWaiting = false;
-            IsStoping = false;
+            if (FMODHelper.PlaySound(currentEventRef, soundSource.gameObject, out currentEventInstance))
+            {
+                IsPlaying = true;
+                IsWaiting = false;
+                IsStoping = false;
+            }
+            else
+            {
+                IsPlaying = false;
+                IsWaiting = false;
+                IsStoping = true;
+            }
         }
 
         protected void GoToWait()

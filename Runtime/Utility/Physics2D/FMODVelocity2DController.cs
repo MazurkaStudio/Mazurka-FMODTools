@@ -80,8 +80,8 @@ namespace MazurkaGameKit.FMODTools
             {
                 if (CurrentRelativePosition >= positionTreshold)
                 {
-                    audioEmitter.PlaySound(positionSoundEvent, positionParam, out positionSoundInstance);
-                    IsEmittingPositionSound = true;
+                    if(audioEmitter.PlaySound(positionSoundEvent, positionParam, out positionSoundInstance))
+                        IsEmittingPositionSound = true;
                 }
             }
         }
@@ -101,8 +101,8 @@ namespace MazurkaGameKit.FMODTools
             {
                 if (CurrentRelativeRotation >= rotationTreshold)
                 {
-                    audioEmitter.PlaySound(rotationSoundEvent, rotationParam, out rotationSoundInstance);
-                    IsEmittingRotationSound = true;
+                    if(audioEmitter.PlaySound(rotationSoundEvent, rotationParam, out rotationSoundInstance))
+                        IsEmittingRotationSound = true;
                 }
             }
         }

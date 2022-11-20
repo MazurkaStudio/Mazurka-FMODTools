@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using FMOD.Studio;
 using FMODUnity;
@@ -106,153 +108,154 @@ namespace MazurkaGameKit.FMODTools
 
         #region One Shot
 
-        public static void PlaySound_OneShot(EventReference eventRef, GameObject source)
+        public static bool PlaySound_OneShot(EventReference eventRef, GameObject source)
         {
-            if (IsEvent3D(eventRef))
-            {
-                PlaySound_3D_OneShot(eventRef, source);
-            }
-            else
-            {
-                PlaySound_2D_OneShot(eventRef);
-            }
-        }
-
-        public static void PlaySound_OneShot(EventReference eventRef, Vector3 source)
-        {
-            if (IsEvent3D(eventRef))
-            {
-                PlaySound_3D_OneShot(eventRef, source);
-            }
-            else
-            {
-                PlaySound_2D_OneShot(eventRef);
-            }
-        }
-
-
-        public static void PlaySound_OneShot(EventReference eventRef, GameObject source, ParamRef parameter, bool ignoreKeepSpeed = false)
-        {
-            if (IsEvent3D(eventRef))
-            {
-                PlaySound_3D_OneShot(eventRef, source, parameter, ignoreKeepSpeed);
-            }
-            else
-            {
-                PlaySound_2D_OneShot(eventRef, parameter, ignoreKeepSpeed);
-            }
-        }
-
-        public static void PlaySound_OneShot(EventReference eventRef, GameObject source, ParamRef[] parameters, bool ignoreKeepSpeed = false)
-        {
-            if (IsEvent3D(eventRef))
-            {
-                PlaySound_3D_OneShot(eventRef, source, parameters, ignoreKeepSpeed);
-            }
-            else
-            {
-                PlaySound_2D_OneShot(eventRef, parameters, ignoreKeepSpeed);
-            }
-        }
-
-
-        public static void PlaySound_OneShot(EventReference eventRef, Vector3 source, ParamRef parameter, bool ignoreKeepSpeed = false)
-        {
-            if (IsEvent3D(eventRef))
-            {
-                PlaySound_3D_OneShot(eventRef, source, parameter, ignoreKeepSpeed);
-            }
-            else
-            {
-                PlaySound_2D_OneShot(eventRef, parameter, ignoreKeepSpeed);
-            }
-        }
-
-        public static void PlaySound_OneShot(EventReference eventRef, Vector3 source, ParamRef[] parameters, bool ignoreKeepSpeed = false)
-        {
-            if (IsEvent3D(eventRef))
-            {
-                PlaySound_3D_OneShot(eventRef, source, parameters, ignoreKeepSpeed);
-            }
-            else
-            {
-                PlaySound_2D_OneShot(eventRef, parameters, ignoreKeepSpeed);
-            }
-        }
-
-
-
-
-
-        public static void PlaySound_2D_OneShot(EventReference eventRef)
-        {
-            if (eventRef.IsNull)
-            {
 #if UNITY_EDITOR
-                UnityEngine.Debug.LogWarning("You are trying playing a null event reference");
+            if (eventRef.IsNull) throw new Exception("Your trying playing a null event");
+#else
+            if (eventRef.IsNull) return false;
 #endif
-                return;
+            
+            if (IsEvent3D(eventRef))
+            {
+                PlaySound_3D_OneShot(eventRef, source);
+            }
+            else
+            {
+                PlaySound_2D_OneShot(eventRef);
             }
 
+            return true;
+        }
+
+        public static bool PlaySound_OneShot(EventReference eventRef, Vector3 source)
+        {
+#if UNITY_EDITOR
+            if (eventRef.IsNull) throw new Exception("Your trying playing a null event");
+#else
+            if (eventRef.IsNull) return false;
+#endif
+            
+            if (IsEvent3D(eventRef))
+            {
+                PlaySound_3D_OneShot(eventRef, source);
+            }
+            else
+            {
+                PlaySound_2D_OneShot(eventRef);
+            }
+            
+            return true;
+        }
+        
+        public static bool PlaySound_OneShot(EventReference eventRef, GameObject source, ParamRef parameter, bool ignoreKeepSpeed = false)
+        {
+#if UNITY_EDITOR
+            if (eventRef.IsNull) throw new Exception("Your trying playing a null event");
+#else
+            if (eventRef.IsNull) return false;
+#endif
+            
+            if (IsEvent3D(eventRef))
+            {
+                PlaySound_3D_OneShot(eventRef, source, parameter, ignoreKeepSpeed);
+            }
+            else
+            {
+                PlaySound_2D_OneShot(eventRef, parameter, ignoreKeepSpeed);
+            }
+            
+            return true;
+        }
+
+        public static bool PlaySound_OneShot(EventReference eventRef, GameObject source, ParamRef[] parameters, bool ignoreKeepSpeed = false)
+        {
+#if UNITY_EDITOR
+            if (eventRef.IsNull) throw new Exception("Your trying playing a null event");
+#else
+            if (eventRef.IsNull) return false;
+#endif
+            
+            if (IsEvent3D(eventRef))
+            {
+                PlaySound_3D_OneShot(eventRef, source, parameters, ignoreKeepSpeed);
+            }
+            else
+            {
+                PlaySound_2D_OneShot(eventRef, parameters, ignoreKeepSpeed);
+            }
+            
+            return true;
+        }
+        
+        public static bool PlaySound_OneShot(EventReference eventRef, Vector3 source, ParamRef parameter, bool ignoreKeepSpeed = false)
+        {
+#if UNITY_EDITOR
+            if (eventRef.IsNull) throw new Exception("Your trying playing a null event");
+#else
+            if (eventRef.IsNull) return false;
+#endif
+            
+            if (IsEvent3D(eventRef))
+            {
+                PlaySound_3D_OneShot(eventRef, source, parameter, ignoreKeepSpeed);
+            }
+            else
+            {
+                PlaySound_2D_OneShot(eventRef, parameter, ignoreKeepSpeed);
+            }
+            
+            return true;
+        }
+
+        public static bool PlaySound_OneShot(EventReference eventRef, Vector3 source, ParamRef[] parameters, bool ignoreKeepSpeed = false)
+        {
+#if UNITY_EDITOR
+            if (eventRef.IsNull) throw new Exception("Your trying playing a null event");
+#else
+            if (eventRef.IsNull) return false;
+#endif
+            
+            if (IsEvent3D(eventRef))
+            {
+                PlaySound_3D_OneShot(eventRef, source, parameters, ignoreKeepSpeed);
+            }
+            else
+            {
+                PlaySound_2D_OneShot(eventRef, parameters, ignoreKeepSpeed);
+            }
+            
+            return true;
+        }
+        
+        #region Private
+
+        private static void PlaySound_2D_OneShot(EventReference eventRef)
+        {
             RuntimeManager.PlayOneShot(eventRef);
-
         }
 
-        public static void PlaySound_3D_OneShot(EventReference eventRef, Vector3 position)
+        private static void PlaySound_3D_OneShot(EventReference eventRef, Vector3 position)
         {
-            if (eventRef.IsNull)
-            {
-#if UNITY_EDITOR
-                UnityEngine.Debug.LogWarning("You are trying playing a null event reference");
-#endif
-                return;
-            }
-
             RuntimeManager.PlayOneShot(eventRef, position);
-
         }
 
-        public static void PlaySound_3D_OneShot(EventReference eventRef, GameObject attachTo)
-        {
-            if (eventRef.IsNull)
-            {
-#if UNITY_EDITOR
-                UnityEngine.Debug.LogWarning("You are trying playing a null event reference");
-#endif
-                return;
-            }
-
+        private static void PlaySound_3D_OneShot(EventReference eventRef, GameObject attachTo)
+        { 
             RuntimeManager.PlayOneShotAttached(eventRef, attachTo);
-
         }
 
 
-        public static void PlaySound_2D_OneShot(EventReference eventRef, ParamRef parameter, bool ignoreKeepSpeed = false)
+        private static void PlaySound_2D_OneShot(EventReference eventRef, ParamRef parameter, bool ignoreKeepSpeed = false)
         {
-            if (eventRef.IsNull)
-            {
-#if UNITY_EDITOR
-                UnityEngine.Debug.LogWarning("You are trying playing a null event reference");
-#endif
-                return;
-            }
-
             EventInstance eventInstance = CreateInstance(eventRef);
             eventInstance.setParameterByName(parameter.Name, parameter.Value, ignoreKeepSpeed);
             eventInstance.start();
             eventInstance.release();
         }
 
-        public static void PlaySound_2D_OneShot(EventReference eventRef, ParamRef[] parameters, bool ignoreKeepSpeed = false)
+        private static void PlaySound_2D_OneShot(EventReference eventRef, ParamRef[] parameters, bool ignoreKeepSpeed = false)
         {
-            if (eventRef.IsNull)
-            {
-#if UNITY_EDITOR
-                UnityEngine.Debug.LogWarning("You are trying playing a null event reference");
-#endif
-                return;
-            }
-
             EventInstance eventInstance = CreateInstance(eventRef);
             foreach (ParamRef parameter in parameters)
             {
@@ -263,34 +266,17 @@ namespace MazurkaGameKit.FMODTools
         }
 
 
-        public static void PlaySound_3D_OneShot(EventReference eventRef, Vector3 position, ParamRef parameter, bool ignoreKeepSpeed = false)
+        private static void PlaySound_3D_OneShot(EventReference eventRef, Vector3 position, ParamRef parameter, bool ignoreKeepSpeed = false)
         {
-            if (eventRef.IsNull)
-            {
-#if UNITY_EDITOR
-                UnityEngine.Debug.LogWarning("You are trying playing a null event reference");
-#endif
-                return;
-            }
-
             EventInstance eventInstance = CreateInstance(eventRef);
             eventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(position));
             eventInstance.setParameterByName(parameter.Name, parameter.Value, ignoreKeepSpeed);
             eventInstance.start();
             eventInstance.release();
-
         }
 
-        public static void PlaySound_3D_OneShot(EventReference eventRef, GameObject attachTo, ParamRef parameter, bool ignoreKeepSpeed = false)
+        private static void PlaySound_3D_OneShot(EventReference eventRef, GameObject attachTo, ParamRef parameter, bool ignoreKeepSpeed = false)
         {
-            if (eventRef.IsNull)
-            {
-#if UNITY_EDITOR
-                UnityEngine.Debug.LogWarning("You are trying playing a null event reference");
-#endif
-                return;
-            }
-
             EventInstance eventInstance = CreateInstance(eventRef);
             RuntimeManager.AttachInstanceToGameObject(eventInstance, attachTo.transform, attachTo.GetComponent<Rigidbody2D>());
             eventInstance.setParameterByName(parameter.Name, parameter.Value, ignoreKeepSpeed);
@@ -298,16 +284,8 @@ namespace MazurkaGameKit.FMODTools
             eventInstance.release();
         }
 
-        public static void PlaySound_3D_OneShot(EventReference eventRef, Vector3 position, ParamRef[] parameters, bool ignoreKeepSpeed = false)
+        private static void PlaySound_3D_OneShot(EventReference eventRef, Vector3 position, ParamRef[] parameters, bool ignoreKeepSpeed = false)
         {
-            if (eventRef.IsNull)
-            {
-#if UNITY_EDITOR
-                UnityEngine.Debug.LogWarning("You are trying playing a null event reference");
-#endif
-                return;
-            }
-
             EventInstance eventInstance = CreateInstance(eventRef);
             eventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(position));
             foreach (ParamRef parameter in parameters)
@@ -320,16 +298,8 @@ namespace MazurkaGameKit.FMODTools
 
         }
 
-        public static void PlaySound_3D_OneShot(EventReference eventRef, GameObject attachTo, ParamRef[] parameters, bool ignoreKeepSpeed = false)
+        private static void PlaySound_3D_OneShot(EventReference eventRef, GameObject attachTo, ParamRef[] parameters, bool ignoreKeepSpeed = false)
         {
-            if (eventRef.IsNull)
-            {
-#if UNITY_EDITOR
-                UnityEngine.Debug.LogWarning("You are trying playing a null event reference");
-#endif
-                return;
-            }
-
             EventInstance eventInstance = CreateInstance(eventRef);
             RuntimeManager.AttachInstanceToGameObject(eventInstance, attachTo.transform, attachTo.GetComponent<Rigidbody2D>());
             foreach (ParamRef parameter in parameters)
@@ -340,164 +310,184 @@ namespace MazurkaGameKit.FMODTools
             eventInstance.start();
             eventInstance.release();
         }
+        
+        #endregion
 
         #endregion
 
         #region Instance
 
-        public static EventInstance PlaySound(EventReference eventRef, GameObject source)
+        public static bool PlaySound(EventReference eventRef, GameObject source, out EventInstance eventInstance)
         {
-            if (IsEvent3D(eventRef))
-            {
-                return PlaySound_3D(eventRef, source);
-            }
-            else
-            {
-                return PlaySound_2D(eventRef);
-            }
-        }
-
-        public static EventInstance PlaySound(EventReference eventRef, Vector3 source)
-        {
-            if (IsEvent3D(eventRef))
-            {
-                return PlaySound_3D(eventRef, source);
-            }
-            else
-            {
-                return PlaySound_2D(eventRef);
-            }
-        }
-
-
-        public static EventInstance PlaySound(EventReference eventRef, GameObject source, ParamRef parameter, bool ignoreKeepSpeed = false)
-        {
-            if (IsEvent3D(eventRef))
-            {
-                return PlaySound_3D(eventRef, source, parameter, ignoreKeepSpeed);
-            }
-            else
-            {
-                return PlaySound_2D(eventRef, parameter, ignoreKeepSpeed);
-            }
-        }
-
-        public static EventInstance PlaySound(EventReference eventRef, GameObject source, ParamRef[] parameters, bool ignoreKeepSpeed = false)
-        {
-            if (IsEvent3D(eventRef))
-            {
-                return PlaySound_3D(eventRef, source, parameters, ignoreKeepSpeed);
-            }
-            else
-            {
-                return PlaySound_2D(eventRef, parameters, ignoreKeepSpeed);
-            }
-        }
-
-
-        public static EventInstance PlaySound(EventReference eventRef, Vector3 source, ParamRef parameter, bool ignoreKeepSpeed = false)
-        {
-            if (IsEvent3D(eventRef))
-            {
-                return PlaySound_3D(eventRef, source, parameter, ignoreKeepSpeed);
-            }
-            else
-            {
-                return PlaySound_2D(eventRef, parameter, ignoreKeepSpeed);
-            }
-        }
-
-        public static EventInstance PlaySound(EventReference eventRef, Vector3 source, ParamRef[] parameters, bool ignoreKeepSpeed = false)
-        {
-            if (IsEvent3D(eventRef))
-            {
-                return PlaySound_3D(eventRef, source, parameters, ignoreKeepSpeed);
-            }
-            else
-            {
-                return PlaySound_2D(eventRef, parameters, ignoreKeepSpeed);
-            }
-        }
-
-
-
-
-        public static EventInstance PlaySound_2D(EventReference eventRef)
-        {
-            if (eventRef.IsNull)
-            {
+            eventInstance = default;
+            
 #if UNITY_EDITOR
-                UnityEngine.Debug.LogWarning("You are trying playing a null event reference");
+            if (eventRef.IsNull) throw new Exception("Your trying playing a null event");
+#else
+            if (eventRef.IsNull) return false;
 #endif
-                return default;
+            
+            if (IsEvent3D(eventRef))
+            {
+                eventInstance = PlaySound_3D(eventRef, source);
+            }
+            else
+            {
+                eventInstance = PlaySound_2D(eventRef);
             }
 
+            return true;
+        }
+
+        public static bool PlaySound(EventReference eventRef, Vector3 source, out EventInstance eventInstance)
+        {
+            eventInstance = default;
+            
+#if UNITY_EDITOR
+            if (eventRef.IsNull) throw new Exception("Your trying playing a null event");
+#else
+            if (eventRef.IsNull) return false;
+#endif
+            
+            if (IsEvent3D(eventRef))
+            {
+                eventInstance = PlaySound_3D(eventRef, source);
+            }
+            else
+            {
+                eventInstance = PlaySound_2D(eventRef);
+            }
+            
+            return true;
+        }
+
+
+        public static bool PlaySound(EventReference eventRef, GameObject source, ParamRef parameter, out EventInstance eventInstance, bool ignoreKeepSpeed = false)
+        {
+            eventInstance = default;
+            
+#if UNITY_EDITOR
+            if (eventRef.IsNull) throw new Exception("Your trying playing a null event");
+#else
+            if (eventRef.IsNull) return false;
+#endif
+            
+            if (IsEvent3D(eventRef))
+            {
+                eventInstance = PlaySound_3D(eventRef, source, parameter, ignoreKeepSpeed);
+            }
+            else
+            {
+                eventInstance = PlaySound_2D(eventRef, parameter, ignoreKeepSpeed);
+            }
+            
+            return true;
+        }
+
+        public static bool PlaySound(EventReference eventRef, GameObject source, ParamRef[] parameters, out EventInstance eventInstance, bool ignoreKeepSpeed = false)
+        {
+            eventInstance = default;
+            
+#if UNITY_EDITOR
+            if (eventRef.IsNull) throw new Exception("Your trying playing a null event");
+#else
+            if (eventRef.IsNull) return false;
+#endif
+            
+            if (IsEvent3D(eventRef))
+            {
+                eventInstance = PlaySound_3D(eventRef, source, parameters, ignoreKeepSpeed);
+            }
+            else
+            {
+                eventInstance = PlaySound_2D(eventRef, parameters, ignoreKeepSpeed);
+            }
+            
+            return true;
+        }
+
+
+        public static bool PlaySound(EventReference eventRef, Vector3 source, ParamRef parameter, out EventInstance eventInstance, bool ignoreKeepSpeed = false)
+        {
+            eventInstance = default;
+            
+#if UNITY_EDITOR
+            if (eventRef.IsNull) throw new Exception("Your trying playing a null event");
+#else
+            if (eventRef.IsNull) return false;
+#endif
+            
+            if (IsEvent3D(eventRef))
+            {
+                eventInstance = PlaySound_3D(eventRef, source, parameter, ignoreKeepSpeed);
+            }
+            else
+            {
+                eventInstance = PlaySound_2D(eventRef, parameter, ignoreKeepSpeed);
+            }
+            
+            return true;
+        }
+
+        public static bool PlaySound(EventReference eventRef, Vector3 source, ParamRef[] parameters, out EventInstance eventInstance, bool ignoreKeepSpeed = false)
+        {
+            eventInstance = default;
+            
+#if UNITY_EDITOR
+            if (eventRef.IsNull) throw new Exception("Your trying playing a null event");
+#else
+            if (eventRef.IsNull) return false;
+#endif
+
+            if (IsEvent3D(eventRef))
+            {
+                eventInstance = PlaySound_3D(eventRef, source, parameters, ignoreKeepSpeed);
+            }
+            else
+            {
+                eventInstance = PlaySound_2D(eventRef, parameters, ignoreKeepSpeed);
+            }
+            
+            return true;
+        }
+
+
+        #region Private
+
+        private static EventInstance PlaySound_2D(EventReference eventRef)
+        {
             EventInstance eventInstance = CreateInstance(eventRef);
             eventInstance.start();
             return eventInstance;
         }
 
-        public static EventInstance PlaySound_3D(EventReference eventRef, Vector3 position)
+        private static EventInstance PlaySound_3D(EventReference eventRef, Vector3 position)
         {
-            if (eventRef.IsNull)
-            {
-#if UNITY_EDITOR
-                UnityEngine.Debug.LogWarning("You are trying playing a null event reference");
-#endif
-                return default;
-            }
-
             EventInstance eventInstance = CreateInstance(eventRef);
             eventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(position));
             eventInstance.start();
             return eventInstance;
-
         }
 
-        public static EventInstance PlaySound_3D(EventReference eventRef, GameObject attachTo)
+        private static EventInstance PlaySound_3D(EventReference eventRef, GameObject attachTo)
         {
-            if (eventRef.IsNull)
-            {
-#if UNITY_EDITOR
-                UnityEngine.Debug.LogWarning("You are trying playing a null event reference");
-#endif
-                return default;
-            }
-
             EventInstance eventInstance = CreateInstance(eventRef);
             RuntimeManager.AttachInstanceToGameObject(eventInstance, attachTo.transform);
             eventInstance.start();
             return eventInstance;
-
         }
 
 
-        public static EventInstance PlaySound_2D(EventReference eventRef, ParamRef parameter, bool ignoreKeepSpeed = false)
+        private static EventInstance PlaySound_2D(EventReference eventRef, ParamRef parameter, bool ignoreKeepSpeed = false)
         {
-            if (eventRef.IsNull)
-            {
-#if UNITY_EDITOR
-                UnityEngine.Debug.LogWarning("You are trying playing a null event reference");
-#endif
-                return default;
-            }
-
             EventInstance eventInstance = CreateInstance(eventRef);
             eventInstance.setParameterByName(parameter.Name, parameter.Value, ignoreKeepSpeed);
             eventInstance.start();
             return eventInstance;
         }
 
-        public static EventInstance PlaySound_2D(EventReference eventRef, ParamRef[] parameters, bool ignoreKeepSpeed = false)
+        private static EventInstance PlaySound_2D(EventReference eventRef, ParamRef[] parameters, bool ignoreKeepSpeed = false)
         {
-            if (eventRef.IsNull)
-            {
-#if UNITY_EDITOR
-                UnityEngine.Debug.LogWarning("You are trying playing a null event reference");
-#endif
-                return default;
-            }
-
             EventInstance eventInstance = CreateInstance(eventRef);
             foreach (ParamRef parameter in parameters)
             {
@@ -508,34 +498,17 @@ namespace MazurkaGameKit.FMODTools
         }
 
 
-        public static EventInstance PlaySound_3D(EventReference eventRef, Vector3 position, ParamRef parameter, bool ignoreKeepSpeed = false)
+        private static EventInstance PlaySound_3D(EventReference eventRef, Vector3 position, ParamRef parameter, bool ignoreKeepSpeed = false)
         {
-            if (eventRef.IsNull)
-            {
-#if UNITY_EDITOR
-                UnityEngine.Debug.LogWarning("You are trying playing a null event reference");
-#endif
-                return default;
-            }
-
             EventInstance eventInstance = CreateInstance(eventRef);
             eventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(position));
             eventInstance.setParameterByName(parameter.Name, parameter.Value, ignoreKeepSpeed);
             eventInstance.start();
             return eventInstance;
-
         }
 
-        public static EventInstance PlaySound_3D(EventReference eventRef, GameObject attachTo, ParamRef parameter, bool ignoreKeepSpeed = false)
+        private static EventInstance PlaySound_3D(EventReference eventRef, GameObject attachTo, ParamRef parameter, bool ignoreKeepSpeed = false)
         {
-            if (eventRef.IsNull)
-            {
-#if UNITY_EDITOR
-                UnityEngine.Debug.LogWarning("You are trying playing a null event reference");
-#endif
-                return default;
-            }
-
             EventInstance eventInstance = CreateInstance(eventRef);
             RuntimeManager.AttachInstanceToGameObject(eventInstance, attachTo.transform, attachTo.GetComponent<Rigidbody2D>());
             eventInstance.setParameterByName(parameter.Name, parameter.Value, ignoreKeepSpeed);
@@ -543,16 +516,8 @@ namespace MazurkaGameKit.FMODTools
             return eventInstance;
         }
 
-        public static EventInstance PlaySound_3D(EventReference eventRef, Vector3 position, ParamRef[] parameters, bool ignoreKeepSpeed = false)
+        private static EventInstance PlaySound_3D(EventReference eventRef, Vector3 position, ParamRef[] parameters, bool ignoreKeepSpeed = false)
         {
-            if (eventRef.IsNull)
-            {
-#if UNITY_EDITOR
-                UnityEngine.Debug.LogWarning("You are trying playing a null event reference");
-#endif
-                return default;
-            }
-
             EventInstance eventInstance = CreateInstance(eventRef);
             eventInstance.set3DAttributes(RuntimeUtils.To3DAttributes(position));
 
@@ -563,19 +528,10 @@ namespace MazurkaGameKit.FMODTools
 
             eventInstance.start();
             return eventInstance;
-
         }
 
-        public static EventInstance PlaySound_3D(EventReference eventRef, GameObject attachTo, ParamRef[] parameters, bool ignoreKeepSpeed = false)
+        private static EventInstance PlaySound_3D(EventReference eventRef, GameObject attachTo, ParamRef[] parameters, bool ignoreKeepSpeed = false)
         {
-            if (eventRef.IsNull)
-            {
-#if UNITY_EDITOR
-                UnityEngine.Debug.LogWarning("You are trying playing a null event reference");
-#endif
-                return default;
-            }
-
             EventInstance eventInstance = CreateInstance(eventRef);
             RuntimeManager.AttachInstanceToGameObject(eventInstance, attachTo.transform, attachTo.GetComponent<Rigidbody2D>());
             foreach (ParamRef parameter in parameters)
@@ -586,6 +542,8 @@ namespace MazurkaGameKit.FMODTools
             return eventInstance;
         }
 
+        #endregion
+        
         #endregion
 
         #endregion

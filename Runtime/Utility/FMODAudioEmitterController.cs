@@ -50,14 +50,12 @@ namespace MazurkaGameKit.FMODTools
             if(playWithParameters)
             {
                 if (isOnShot) emitter.PlayOneShot(eventRef, parameters);
-                else if (emitter.PlaySound(eventRef, parameters, out EventInstance eventInstance))
-                    this.eventInstance = eventInstance;
+                else emitter.PlaySound(eventRef, parameters, out eventInstance);
             }
             else
             {
                 if (isOnShot) emitter.PlayOneShot(eventRef);
-                else if (emitter.PlaySound(eventRef, out EventInstance eventInstance))
-                    this.eventInstance = eventInstance;
+                else emitter.PlaySound(eventRef, out eventInstance);
             }
         }
 
