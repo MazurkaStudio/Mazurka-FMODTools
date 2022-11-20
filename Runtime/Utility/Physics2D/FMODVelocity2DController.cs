@@ -14,109 +14,62 @@ namespace MazurkaGameKit.FMODTools
     {
         [SerializeField] private FMODAudioEmitter audioEmitter;
 
-        [SerializeField] private bool emitSoundWhenMove = true;
-        [SerializeField] private EventReference positionSoundEvent;
-        private EventInstance positionSoundInstance;
-        [SerializeField] private string positionParamName = "relativeSpeed";
-        private ParamRef positionParam;
-        [SerializeField] private float maxPositionSpeed = 10f;
-        [SerializeField, Range(0f, 1f)] private float positionTreshold= 0.05f;
-        public bool IsEmittingPositionSound { get; private set; }
-        public float CurrentRelativePosition { get; private set; }
-        
-        [SerializeField] private bool emitSoundWhenRotate;
-        [SerializeField] private EventReference rotationSoundEvent;
-        private EventInstance rotationSoundInstance;
-        [SerializeField] private string rotationParamName = "angularRelativeSpeed";
-        private ParamRef rotationParam;
-        [SerializeField] private float maxRotationSpeed = 200f;
-        [SerializeField, Range(0f, 1f)] private float rotationTreshold = 0.05f;
-        public bool IsEmittingRotationSound { get; private set; }
-        public float CurrentRelativeRotation { get; private set; }
+        [SerializeField] private FMODPhysics2DHelper.DynamicValueSound[] positionEvents;
+        [SerializeField] private FMODPhysics2DHelper.DynamicValueSound[] rotationEvents;
+
         
         private Rigidbody2D rigidBody;
         
         private void Awake()
         {
             rigidBody = GetComponent<Rigidbody2D>();
-            positionParam = new ParamRef { Name = positionParamName };
-            rotationParam = new ParamRef { Name = rotationParamName };
+            
+            foreach (var position in positionEvents)
+            {
+                position.Initialize(audioEmitter);
+            }
+            foreach (var rotation in rotationEvents)
+            {
+                rotation.Initialize(audioEmitter);
+            }
         }
         
         private void FixedUpdate()
         {
             SetPositionAmount();
             SetRotationAmount();
-            CheckPositionSoundState();
-            CheckRotationSoundState();
         }
 
         private void SetPositionAmount()
         {
-            CurrentRelativePosition = (Mathf.Abs(rigidBody.velocity.magnitude) * Time.fixedDeltaTime) / (maxPositionSpeed * Time.fixedDeltaTime);
-            positionParam.Value = CurrentRelativePosition;
-            audioEmitter.SetParameter(positionSoundInstance, positionParam);
+            foreach (var position in positionEvents)
+            {
+                position.EvaluateValue(rigidBody.velocity.magnitude);
+            }
         }
         
         private void SetRotationAmount()
         {    
-            CurrentRelativeRotation = (Mathf.Abs(rigidBody.angularVelocity) * Time.fixedDeltaTime) / (maxRotationSpeed * Time.fixedDeltaTime);
-            rotationParam.Value = CurrentRelativeRotation;
-            audioEmitter.SetParameter(rotationSoundInstance, rotationParam);
-        }
-         
-        private void CheckPositionSoundState()
-        {
-            if (!emitSoundWhenMove) return;
-            
-            if (IsEmittingPositionSound)
+            foreach (var rotation in rotationEvents)
             {
-                if (CurrentRelativePosition < positionTreshold)
-                {
-                    StopPositionSound();
-                }
-            }
-            else
-            {
-                if (CurrentRelativePosition >= positionTreshold)
-                {
-                    if(audioEmitter.PlaySound(positionSoundEvent, positionParam, out positionSoundInstance))
-                        IsEmittingPositionSound = true;
-                }
-            }
-        }
-        
-        private void CheckRotationSoundState()
-        {   
-            if (!emitSoundWhenRotate) return;
-            
-            if (IsEmittingRotationSound)
-            {
-                if (CurrentRelativeRotation < rotationTreshold)
-                {
-                    StopRotationSound();
-                }
-            }
-            else
-            {
-                if (CurrentRelativeRotation >= rotationTreshold)
-                {
-                    if(audioEmitter.PlaySound(rotationSoundEvent, rotationParam, out rotationSoundInstance))
-                        IsEmittingRotationSound = true;
-                }
+                rotation.EvaluateValue(rigidBody.velocity.magnitude);
             }
         }
 
-        private void StopPositionSound()
+        public void ForceStopPositionSound()
         {
-            audioEmitter.StopSound(positionSoundInstance);
-            IsEmittingPositionSound = false;
+            foreach (var position in positionEvents)
+            {
+                position.ForceStop();
+            }
         }
-        
-        private void StopRotationSound()
+
+        public void ForceStopRotationSound()
         {
-            audioEmitter.StopSound(rotationSoundInstance);
-            IsEmittingRotationSound = false;
+            foreach (var rotation in rotationEvents)
+            {
+                rotation.ForceStop();
+            }
         }
     }
 }

@@ -6,8 +6,8 @@ using UnityEngine.Events;
 
 namespace MazurkaGameKit.FMODTools
 {
-    [RequireComponent(typeof(HingeJoint2D))]
-    public class FMODHingeJoint2DController : MonoBehaviour
+    [RequireComponent(typeof(SliderJoint2D))]
+    public class FMODSliderJoint2DController : MonoBehaviour
     {
         [SerializeField] private FMODAudioEmitter audioEmitter;
         [SerializeField] private FMODPhysics2DHelper.DynamicValueSound[] frictionEvents;
@@ -16,14 +16,13 @@ namespace MazurkaGameKit.FMODTools
         [SerializeField] private bool emitSoundOnBreak;
         [SerializeField, ShowIf("emitSoundOnBreak")] private EventReference breakSound;
         
-        private HingeJoint2D hingeJoint;
-        
+        private SliderJoint2D sliderJoint;
+
         private float lastSpeedValue;
-        
+
         private void Awake()
         {
-            hingeJoint = GetComponent<HingeJoint2D>();
-
+            sliderJoint = GetComponent<SliderJoint2D>();
             foreach (var friction in frictionEvents)
             {
                 friction.Initialize(audioEmitter);
@@ -35,8 +34,8 @@ namespace MazurkaGameKit.FMODTools
         }
 
         private void FixedUpdate()
-        {            
-            if (hingeJoint == null)
+        {
+            if (sliderJoint == null)
             {
                 if (emitSoundOnBreak)
                     audioEmitter.PlayOneShot(breakSound);
@@ -48,14 +47,14 @@ namespace MazurkaGameKit.FMODTools
             CheckJointFrictions();
             CheckJointLimits();
             
-            lastSpeedValue = hingeJoint.jointSpeed;
+            lastSpeedValue = sliderJoint.jointSpeed;
         }
-
+        
         private void CheckJointFrictions()
         {
             foreach (var friction in frictionEvents)
             {
-                friction.EvaluateValue(hingeJoint.jointSpeed);
+                friction.EvaluateValue(sliderJoint.jointSpeed);
             }
         }
 
@@ -63,10 +62,8 @@ namespace MazurkaGameKit.FMODTools
         {
             foreach (var limit in limitsEvents)
             {
-                limit.CheckLimit(hingeJoint.limitState, lastSpeedValue);
+                limit.CheckLimit(sliderJoint.limitState, lastSpeedValue);
             }
         }
     }
-
 }
-

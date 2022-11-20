@@ -12,22 +12,20 @@ namespace MazurkaGameKit.FMODTools
     [RequireComponent(typeof(Rigidbody2D))]
     public class FMODFriction2DController : MonoBehaviour
     {
-        [SerializeField] private FMODAudioEmitter audioEmitter;
-        [SerializeField] private EventReference frictionSoundEvent;
-         private EventInstance frictionSoundInstance;
-         [SerializeField] private string frictionParamName = "frictionAmount";
-         private ParamRef frictionParam;
+         [SerializeField] private FMODAudioEmitter audioEmitter;
+         
+         [SerializeField] private FMODPhysics2DHelper.DynamicValueSound[] frictionEvents;
+         
          private Rigidbody2D rigidBody;
-
-         [SerializeField] private float maxFrictionSpeed = 3f;
-         [SerializeField, Range(0f, 1f)] private float frictionTreshold = 0.05f;
-
-         public bool IsEmittingFriction { get; private set; }
-         public float CurrentRelativeFriction { get; private set; }
+         
          private void Awake()
          {
              rigidBody = GetComponent<Rigidbody2D>();
-             frictionParam = new ParamRef { Name = frictionParamName };
+             
+             foreach (var friction in frictionEvents)
+             {
+                 friction.Initialize(audioEmitter);
+             }
          }
 
          public bool IsOnGround { get; private set; }
@@ -51,40 +49,22 @@ namespace MazurkaGameKit.FMODTools
              if (!IsOnGround) return;
 
              SetFrictionAmount();
-             CheckSoundState();
          }
 
          private void SetFrictionAmount()
          {
-             CurrentRelativeFriction = (Mathf.Abs(rigidBody.velocity.magnitude) * Time.fixedDeltaTime) / (maxFrictionSpeed * Time.fixedDeltaTime);
-
-             frictionParam.Value = CurrentRelativeFriction;
-             audioEmitter.SetParameter(frictionSoundInstance, frictionParam);
-         }
-         
-         private void CheckSoundState()
-         {
-             if (IsEmittingFriction)
+             foreach (var friction in frictionEvents)
              {
-                 if (CurrentRelativeFriction < frictionTreshold)
-                 {
-                     StopFriction();
-                 }
-             }
-             else
-             {
-                 if (CurrentRelativeFriction >= frictionTreshold)
-                 {
-                     audioEmitter.PlaySound(frictionSoundEvent, frictionParam, out frictionSoundInstance);
-                     IsEmittingFriction = true;
-                 }
+                 friction.EvaluateValue(rigidBody.velocity.magnitude);
              }
          }
 
          private void StopFriction()
          {
-             audioEmitter.StopSound(frictionSoundInstance);
-             IsEmittingFriction = false;
+             foreach (var friction in frictionEvents)
+             {
+                 friction.ForceStop();
+             }
          }
     }
     

@@ -10,45 +10,25 @@ namespace MazurkaGameKit.FMODTools
     public class FMODCollision2DController : MonoBehaviour
     {
         [SerializeField] private FMODAudioEmitter audioEmitter;
-        [SerializeField] private EventReference collisionSoundEvent;
-        [SerializeField] private float collisionTreshold = 5f;
-        [SerializeField] private bool isCollisionRelative = true;
-        [SerializeField] private string collisionParamName = "collisionForce";
-        [SerializeField] private float maxCollisionForce = 40f;
-        [SerializeField] private float minTimeBetweenSound = 0.1f;
 
-        private float lastSoundTime;
+        [SerializeField] private FMODPhysics2DHelper.Collision2DSound[] collisionEvents;
         
-        private Rigidbody2D rigidBody;
-
         private ParamRef collisionParam;
 
         private void Awake()
         {
-            collisionParam = new ParamRef { Name = collisionParamName };
+            foreach (var collision in collisionEvents)
+            {
+                collision.Initialize(audioEmitter);
+            }
         }
 
         private void OnCollisionEnter2D(Collision2D col)
         {
-            if (Time.time - lastSoundTime < minTimeBetweenSound)
-                return;
-            
-            float collisionForce = col.relativeVelocity.magnitude;
-
-            if (collisionForce < collisionTreshold)
-                return;
-
-            if (isCollisionRelative)
+            foreach (var collision in collisionEvents)
             {
-                collisionParam.Value = Mathf.Clamp01(collisionForce / maxCollisionForce);
-                audioEmitter.PlayOneShot(collisionSoundEvent, collisionParam);
+                collision.EvaluateCollision(col.relativeVelocity.magnitude);
             }
-            else
-            {
-                audioEmitter.PlayOneShot(collisionSoundEvent);
-            }
-
-            lastSoundTime = Time.time;
         }
     }
 }
