@@ -103,6 +103,16 @@ namespace MazurkaGameKit.FMODTools
 
         #region Play Sound
 
+        public static void PlayUISound_OnShot(EventReference eventRef)
+        {
+#if UNITY_EDITOR
+            if (eventRef.IsNull) throw new Exception("Your trying playing a null event");
+#else
+            if (eventRef.IsNull) return false;
+#endif
+            PlaySound_2D_OneShot(eventRef);
+        }
+        
         #region One Shot
 
         public static bool PlaySound_OneShot(EventReference eventRef, GameObject source)
