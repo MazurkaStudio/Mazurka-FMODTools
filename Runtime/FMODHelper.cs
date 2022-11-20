@@ -103,6 +103,8 @@ namespace MazurkaGameKit.FMODTools
 
         #region Play Sound
 
+        #region EmitterLess UI
+
         public static void PlayUISound_OneShot(EventReference eventRef)
         {
 #if UNITY_EDITOR
@@ -113,6 +115,29 @@ namespace MazurkaGameKit.FMODTools
             PlaySound_2D_OneShot(eventRef);
         }
         
+        public static void PlayUISound_OneShot(EventReference eventRef, ParamRef parameter, bool ignoreKeepSpeed = false)
+        {
+#if UNITY_EDITOR
+            if (eventRef.IsNull) throw new Exception("Your trying playing a null event");
+#else
+            if (eventRef.IsNull) return false;
+#endif
+            PlaySound_2D_OneShot(eventRef,parameter, ignoreKeepSpeed);
+        }
+        
+        public static void PlayUISound_OneShot(EventReference eventRef, ParamRef[] parameters, bool ignoreKeepSpeed = false)
+        {
+#if UNITY_EDITOR
+            if (eventRef.IsNull) throw new Exception("Your trying playing a null event");
+#else
+            if (eventRef.IsNull) return false;
+#endif
+            PlaySound_2D_OneShot(eventRef, parameters, ignoreKeepSpeed);
+        }
+
+
+        #endregion
+
         #region One Shot
 
         public static bool PlaySound_OneShot(EventReference eventRef, GameObject source)
