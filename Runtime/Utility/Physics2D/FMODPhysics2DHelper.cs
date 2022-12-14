@@ -1,11 +1,12 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using FMOD.Studio;
 using FMODUnity;
-using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
+
+#if ODIN_INSPECTOR
+using Sirenix.OdinInspector;
+#endif
 
 namespace MazurkaGameKit.FMODTools
 {
@@ -21,8 +22,11 @@ namespace MazurkaGameKit.FMODTools
             [SerializeField] private float maxLimitForce;
             [Tooltip("Min relative force to trigger sound (relative to maxLimitForce)"), SerializeField, Range(0f, 1f)] private float tresholdRelativeForce;
             [Tooltip("Send relative force parameters when sound is trigger"),SerializeField] private bool useRelativeForce;
-          
-            [SerializeField, ShowIf("useRelativeForce")] private string relativeForceParamName;
+            
+#if ODIN_INSPECTOR
+            [ShowIf("useRelativeForce")]
+#endif
+            [SerializeField] private string relativeForceParamName;
             
             private ParamRef relativeForceParam;
 
@@ -129,7 +133,7 @@ namespace MazurkaGameKit.FMODTools
             }
         }
 
-        [System.Serializable]
+        [Serializable]
         public class Collision2DSound
         {
             private FMODAudioEmitter audioEmitter;
@@ -139,11 +143,20 @@ namespace MazurkaGameKit.FMODTools
             [SerializeField] private float collisionTreshold = 2f;
 
             [SerializeField] private bool isCollisionRelative;
-            [SerializeField, ShowIf("isCollisionRelative")] private string collisionRelativeParamName = "collisionRelativeForce";
+            
+#if ODIN_INSPECTOR
+            [ShowIf("isCollisionRelative")]
+#endif
+            [SerializeField] private string collisionRelativeParamName = "collisionRelativeForce";
+            
             private ParamRef collisionParam;
             
             [SerializeField] private bool useMinTimeBetweenSound;
-            [SerializeField, ShowIf("useMinTimeBetweenSound")] private float minTimeBetweenSound = 0.1f;
+            
+#if ODIN_INSPECTOR
+            [ShowIf("useMinTimeBetweenSound")]
+#endif
+            [SerializeField] private float minTimeBetweenSound = 0.1f;
             private float lastSoundTime;
             public void Initialize(FMODAudioEmitter audioEmitter)
             {

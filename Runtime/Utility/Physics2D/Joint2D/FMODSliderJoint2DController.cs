@@ -1,6 +1,8 @@
 using FMOD.Studio;
 using FMODUnity;
+#if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
+#endif
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -14,7 +16,11 @@ namespace MazurkaGameKit.FMODTools
         [SerializeField] private FMODPhysics2DHelper.JoinLimitsSound[] limitsEvents;
         
         [SerializeField] private bool emitSoundOnBreak;
-        [SerializeField, ShowIf("emitSoundOnBreak")] private EventReference breakSound;
+        
+#if ODIN_INSPECTOR
+        [ShowIf("emitSoundOnBreak")]
+#endif
+        [SerializeField] private EventReference breakSound;
         
         private SliderJoint2D sliderJoint;
 

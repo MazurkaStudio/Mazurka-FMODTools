@@ -1,7 +1,5 @@
 using FMOD.Studio;
 using FMODUnity;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MazurkaGameKit.FMODTools
@@ -94,13 +92,6 @@ namespace MazurkaGameKit.FMODTools
         public void ResumeAllEvent()
         {
             emitter.PauseEmitter(false);
-        }
-
-
-        [Sirenix.OdinInspector.Button("Stop All Emitters")]
-        public void Test()
-        {
-            FMODAudioEmitterManager.StopAllEmittters();
         }
 
         protected virtual void Start()
