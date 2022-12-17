@@ -33,6 +33,8 @@ namespace MazurkaGameKit.FMODTools
                 return;
 
             eventInstances.Add(eventInstance);
+            
+            IsPlaying = false;
         }
 
         public override void UnregisterNewEventInstance(EventInstance eventInstance)
@@ -41,6 +43,11 @@ namespace MazurkaGameKit.FMODTools
                 return;
 
             eventInstances.Remove(eventInstance);
+
+            if (eventInstances.Count == 0)
+            {
+                IsPlaying = false;
+            }
         }
 
         public override void RefreshEventsInstances()

@@ -39,9 +39,15 @@ namespace MazurkaGameKit.FMODTools
                     this.eventInstance.stop(stopMode);
 
             this.eventInstance = eventInstance;
+
+            IsPlaying = true;
         }
 
-        public override void UnregisterNewEventInstance(EventInstance eventInstance) { this.eventInstance = default; }
+        public override void UnregisterNewEventInstance(EventInstance eventInstance)
+        {
+            IsPlaying = false;
+            this.eventInstance = default;
+        }
 
         public override void RefreshEventsInstances() 
         {
