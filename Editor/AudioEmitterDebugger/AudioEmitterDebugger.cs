@@ -21,12 +21,11 @@ namespace MazurkaGameKit.FMODTools.Editor
   
       private void OnEnable()
       {
-          ActiveEmitters = new List<FMODAudioEmitter>();
-          Refresh();
+          ActiveEmitters = new List<IFMODAudioEmitter>();
           GetTexture();
       }
   
-      public List<FMODAudioEmitter> ActiveEmitters;
+      public List<IFMODAudioEmitter> ActiveEmitters;
       private Texture simpleEmitterTex, complexEmitterTex;
       private Texture muteEmitterTex, nonMuteEmitterTex;
       private Texture playTex, pauseTex, stopTex;
@@ -41,12 +40,6 @@ namespace MazurkaGameKit.FMODTools.Editor
           pauseTex = Resources.Load<Texture>("MazurkaGameKit/FMODTools/Icons/Pause");
           stopTex = Resources.Load<Texture>("MazurkaGameKit/FMODTools/Icons/Stop");
       }
-      
-      public static void Refresh()
-      {
-          AudioEmitterDebugger window = (AudioEmitterDebugger)GetWindow(typeof(AudioEmitterDebugger));
-          window.ActiveEmitters = FindObjectsOfType<FMODAudioEmitter>().ToList();
-      }
 
       private Vector2 scrollPos;
       
@@ -55,23 +48,38 @@ namespace MazurkaGameKit.FMODTools.Editor
           scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
           
           EditorGUILayout.BeginVertical("box");
-          
-          for (int i = 0; i < ActiveEmitters.Count; i++)
+
+          if (Application.isPlaying)
           {
-              FMODAudioEmitter emitter = ActiveEmitters[i];
-              DrawEmitter(emitter);
+              ActiveEmitters = FMODAudioEmitterManager.allActiveEmitters;
+              
+              for (int i = 0; i < ActiveEmitters.Count; i++)
+              {
+                  IFMODAudioEmitter emitter = ActiveEmitters[i];
+                  DrawEmitter(emitter);
+              }
           }
-          
+          else
+          {
+              FMODAudioEmitter[] emitters = FindObjectsOfType<FMODAudioEmitter>();
+
+              for (int i = 0; i < emitters.Length; i++)
+              {
+                  IFMODAudioEmitter emitter = emitters[i];
+                  DrawEmitter(emitter);
+              }
+          }
+
           EditorGUILayout.EndVertical();
           
           EditorGUILayout.EndScrollView();
       }
 
-      private void DrawEmitter(FMODAudioEmitter emitter)
+      private void DrawEmitter(IFMODAudioEmitter emitter)
       {
           EditorGUILayout.BeginHorizontal("box");
               
-          EditorGUILayout.LabelField(emitter.name, GUILayout.Width(100f));
+          EditorGUILayout.LabelField(emitter.GetSoundEmitter.name, GUILayout.Width(100f));
           GUILayout.Box(emitter is FMODComplexAudioEmitter ? complexEmitterTex : simpleEmitterTex, GUILayout.Height(20), GUILayout.Width(20));
           EditorGUILayout.Space(10f);
           
@@ -88,7 +96,7 @@ namespace MazurkaGameKit.FMODTools.Editor
           EditorGUILayout.Space(10f);
           if (GUILayout.Button("Select", GUILayout.Width(100f)))
           {
-              FocusObject(emitter.gameObject);
+              FocusObject(emitter.GetSoundEmitter);
           }
               
           EditorGUILayout.EndHorizontal();

@@ -6,7 +6,7 @@ using UnityEngine;
 namespace MazurkaGameKit.FMODTools
 {
     /// <summary>
-    /// Use this interface to create Audio Emittert that work with static emitter event system
+    /// Use this interface to create Audio Emitter that work with static emitter event system
     /// </summary>
     public interface IFMODAudioEmitter
     {
@@ -65,6 +65,7 @@ namespace MazurkaGameKit.FMODTools
         public bool IsInPause { get; }
 
         public bool CanEmitSound { get; }
+        public bool IsPlaying { get; }
 
         #endregion
     }
