@@ -35,6 +35,8 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
     public virtual GameObject GetSoundEmitter => overrrideSoundSource == null ? gameObject : overrrideSoundSource;
 
     public virtual bool IsInPause => isInPause;
+    public virtual bool CanBePaused => canBePaused;
+    public bool IsPlaying { get; protected set; }
 
     public virtual bool CanEmitSound
     {
