@@ -1,0 +1,18 @@
+{
+    "name": "MazurkaFMODTools.Editor",
+    "rootNamespace": "MazurkaGameKit.FMODTools.Editor",
+    "references": [
+        "GUID:1f02d9a7fb6a7f94a8532506fd553c64"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
