@@ -49,21 +49,27 @@ namespace MazurkaGameKit.FMODTools.Editor
           
           EditorGUILayout.BeginVertical("box");
 
+          totalPlaying = 0;
+          totalSimple = 0;
+          totalComplex = 0;
+          
           if (Application.isPlaying)
           {
               ActiveEmitters = FMODAudioEmitterManager.allActiveEmitters;
-              
-              for (int i = 0; i < ActiveEmitters.Count; i++)
+              total = ActiveEmitters.Count;
+              for (int i = 0; i < total; i++)
               {
                   IFMODAudioEmitter emitter = ActiveEmitters[i];
                   DrawEmitter(emitter);
               }
+
+            
           }
           else
           {
               FMODAudioEmitter[] emitters = FindObjectsOfType<FMODAudioEmitter>();
-
-              for (int i = 0; i < emitters.Length; i++)
+              total = emitters.Length;
+              for (int i = 0; i < total; i++)
               {
                   IFMODAudioEmitter emitter = emitters[i];
                   DrawEmitter(emitter);
@@ -72,15 +78,29 @@ namespace MazurkaGameKit.FMODTools.Editor
 
           EditorGUILayout.EndVertical();
           
+          EditorGUILayout.Space(30f);
+          
+          DrawResults();
+          
           EditorGUILayout.EndScrollView();
       }
 
       private void DrawEmitter(IFMODAudioEmitter emitter)
       {
-          EditorGUILayout.BeginHorizontal("box");
+          EditorGUILayout.BeginHorizontal();
               
-          EditorGUILayout.LabelField(emitter.GetSoundEmitter.name, GUILayout.Width(100f));
-          GUILayout.Box(emitter is FMODComplexAudioEmitter ? complexEmitterTex : simpleEmitterTex, GUILayout.Height(20), GUILayout.Width(20));
+          EditorGUILayout.LabelField(emitter.GetSoundEmitter.name, GUILayout.Width(200f));
+          if (emitter is FMODComplexAudioEmitter)
+          {
+              totalComplex++;
+              GUILayout.Box(complexEmitterTex, GUILayout.Height(20), GUILayout.Width(20));
+          }
+          else
+          {
+              totalSimple++;
+              GUILayout.Box(simpleEmitterTex, GUILayout.Height(20), GUILayout.Width(20));
+          }
+          
           EditorGUILayout.Space(10f);
           
           GUILayout.Box(emitter.CanEmitSound ? nonMuteEmitterTex : muteEmitterTex, GUILayout.Height(20), GUILayout.Width(20));
@@ -91,7 +111,16 @@ namespace MazurkaGameKit.FMODTools.Editor
           }
           else
           {
-              GUILayout.Box(emitter.IsPlaying ? playTex : stopTex, GUILayout.Height(20), GUILayout.Width(20));
+              if (emitter.IsPlaying)
+              {
+                  totalPlaying++;
+                  GUILayout.Box(playTex, GUILayout.Height(20), GUILayout.Width(20));
+              }
+              else
+              {
+                  GUILayout.Box(stopTex, GUILayout.Height(20), GUILayout.Width(20));
+              }
+             
           }
           EditorGUILayout.Space(10f);
           if (GUILayout.Button("Select", GUILayout.Width(100f)))
@@ -102,6 +131,23 @@ namespace MazurkaGameKit.FMODTools.Editor
           EditorGUILayout.EndHorizontal();
           
           EditorGUILayout.LabelField("", GUI.skin.horizontalSlider, GUILayout.Height(15));
+      }
+
+      private int total;
+      private int totalPlaying;
+      private int totalSimple;
+      private int totalComplex;
+      
+      private void DrawResults()
+      {
+          EditorGUILayout.BeginVertical("box");
+          
+          EditorGUILayout.LabelField("Total = " + total);
+          EditorGUILayout.LabelField("Total Playing = " + totalPlaying);
+          EditorGUILayout.LabelField("Total Simple = " + totalSimple);
+          EditorGUILayout.LabelField("Total Complex = " + totalComplex);
+          
+          EditorGUILayout.EndVertical();
       }
       
       public static void FocusObject(GameObject gmaeObject)
