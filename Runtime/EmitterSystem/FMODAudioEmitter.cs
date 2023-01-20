@@ -1,3 +1,4 @@
+using System;
 using FMOD.Studio;
 using FMODUnity;
 using MazurkaGameKit.FMODTools;
@@ -22,8 +23,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
     #endregion
 
     #region Event Instances Registration
-
-
+    
     public abstract void RegisterNewEventInstance(EventInstance eventInstance);
 
     public abstract void UnregisterNewEventInstance(EventInstance eventInstance);
@@ -58,7 +58,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
         }
     }
 
-    protected bool isInPause = false;
+    protected bool isInPause;
 
     public abstract void PauseEmitter(bool value);
 
@@ -66,7 +66,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 
     #endregion
 
-    public virtual bool CanPlayNewSound()
+    protected virtual bool CanPlayNewSound()
     {
         if (!canEmitSound || isInPause)
             return false;
@@ -291,30 +291,41 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
 
     #region Callbacks
 
-    public virtual void OnSoundWasPlayed()
+    protected virtual void OnSoundWasPlayed()
     {
 
     }
 
-    public virtual void OnSoundWasPlayed(EventInstance instance)
+    protected virtual void OnSoundWasPlayed(EventInstance instance)
     {
 
     }
 
-    public virtual void OnSoundWillStopped(EventInstance instance)
+    protected virtual void OnSoundWillStopped(EventInstance instance)
     {
 
     }
 
-    public virtual void OnSoundWillPaused(EventInstance instance)
+    protected virtual void OnSoundWillPaused(EventInstance instance)
     {
 
     }
 
-    public virtual void OnSoundWasResumed(EventInstance instance)
+    protected virtual void OnSoundWasResumed(EventInstance instance)
     {
 
     }
 
     #endregion
+
+    private void OnDrawGizmos()
+    {
+        if (overrrideSoundSource != null)
+        {
+            Gizmos.color = Color.cyan;
+            Vector3 pos = overrrideSoundSource.transform.position;
+            Gizmos.DrawLine(transform.position, pos);
+            Gizmos.DrawSphere(pos, 0.2f);
+        }
+    }
 }

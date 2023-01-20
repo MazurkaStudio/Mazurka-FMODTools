@@ -34,7 +34,7 @@ namespace MazurkaGameKit.FMODTools
 
             eventInstances.Add(eventInstance);
             
-            IsPlaying = false;
+            IsPlaying = true;
         }
 
         public override void UnregisterNewEventInstance(EventInstance eventInstance)
@@ -108,27 +108,27 @@ namespace MazurkaGameKit.FMODTools
 
         #region Callbacks
 
-        public override void OnSoundWasPlayed()
+        protected override void OnSoundWasPlayed()
         {
 
         }
 
-        public override void OnSoundWasPlayed(EventInstance instance)
+        protected override void OnSoundWasPlayed(EventInstance instance)
         {
 
         }
 
-        public override void OnSoundWillStopped(EventInstance instance)
+        protected override void OnSoundWillStopped(EventInstance instance)
         {
 
         }
 
-        public override void OnSoundWillPaused(EventInstance instance)
+        protected override void OnSoundWillPaused(EventInstance instance)
         {
 
         }
 
-        public override void OnSoundWasResumed(EventInstance instance)
+        protected override void OnSoundWasResumed(EventInstance instance)
         {
 
         }
