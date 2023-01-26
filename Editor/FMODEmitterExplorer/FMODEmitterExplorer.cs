@@ -8,12 +8,12 @@ using UnityEditor;
 
 namespace MazurkaGameKit.FMODTools.Editor
 {
-  public class AudioEmitterDebugger : EditorWindow
+  public class FMODEmitterExplorer : EditorWindow
   {
       [MenuItem("MazurkaGameKit/FMOD Tools/Audio Emitter Debugger")]
       public static void CreateWindow()
       {
-          AudioEmitterDebugger window = (AudioEmitterDebugger)GetWindow(typeof(AudioEmitterDebugger));
+          FMODEmitterExplorer window = (FMODEmitterExplorer)GetWindow(typeof(FMODEmitterExplorer));
           window.titleContent = new GUIContent("Audio Emitter Debugger");
           window.maxSize = new Vector2(500f, 500f);
           window.minSize = window.maxSize;

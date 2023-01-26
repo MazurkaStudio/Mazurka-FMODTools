@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace MazurkaGameKit.FMODTools
@@ -26,7 +27,13 @@ namespace MazurkaGameKit.FMODTools
                 rotation.Initialize(audioEmitter);
             }
         }
-        
+
+        private void OnDisable()
+        {
+            ForceStopPositionSound();
+            ForceStopRotationSound();
+        }
+
         private void FixedUpdate()
         {
             SetPositionAmount();
@@ -62,6 +69,14 @@ namespace MazurkaGameKit.FMODTools
             foreach (var rotation in rotationEvents)
             {
                 rotation.ForceStop();
+            }
+        }
+        
+        private void OnValidate()
+        {
+            if (audioEmitter == null)
+            {
+                audioEmitter = GetComponentInChildren<FMODAudioEmitter>();
             }
         }
     }

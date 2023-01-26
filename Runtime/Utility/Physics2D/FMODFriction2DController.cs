@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 
@@ -20,6 +21,11 @@ namespace MazurkaGameKit.FMODTools
              {
                  friction.Initialize(audioEmitter);
              }
+         }
+
+         private void OnDisable()
+         {
+             StopFriction();
          }
 
          public bool IsOnGround { get; private set; }
@@ -58,6 +64,14 @@ namespace MazurkaGameKit.FMODTools
              foreach (var friction in frictionEvents)
              {
                  friction.ForceStop();
+             }
+         }
+         
+         private void OnValidate()
+         {
+             if (audioEmitter == null)
+             {
+                 audioEmitter = GetComponentInChildren<FMODAudioEmitter>();
              }
          }
     }

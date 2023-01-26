@@ -30,5 +30,13 @@ namespace MazurkaGameKit.FMODTools
                 collision.EvaluateCollision(col.relativeVelocity.magnitude);
             }
         }
+
+        private void OnValidate()
+        {
+            if (audioEmitter == null)
+            {
+                audioEmitter = GetComponentInChildren<FMODAudioEmitter>();
+            }
+        }
     }
 }
