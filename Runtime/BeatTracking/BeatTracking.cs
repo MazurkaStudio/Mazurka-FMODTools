@@ -26,8 +26,12 @@ namespace MazurkaGameKit.FMODTools
         
         public static BeatTracking Instance {get; private set;}
         public bool IsPlayingMusic { get; private set; }
-        
-        
+
+        public float CurrentTempo => timelineInfo.tempo;
+        public int CurrentHighSignature => timelineInfo.signatureHigh;
+        public int CurrentLowSignature => timelineInfo.signatureLow;
+
+
         private void Awake()
         {
             if (Instance != null)
@@ -118,6 +122,9 @@ namespace MazurkaGameKit.FMODTools
         public class TimelineInfo
         {
             public int currentBeat = 0;
+            public float tempo = 0;
+            public int signatureHigh = 0;
+            public int signatureLow = 0;
             public FMOD.StringWrapper lastMarker = new FMOD.StringWrapper();
         }
         
@@ -150,6 +157,9 @@ namespace MazurkaGameKit.FMODTools
                     {
                         var parameter = (TIMELINE_BEAT_PROPERTIES)Marshal.PtrToStructure(parameterPtr, typeof(TIMELINE_BEAT_PROPERTIES));
                         timelineInfo.currentBeat = parameter.beat;
+                        timelineInfo.tempo = parameter.tempo;
+                        timelineInfo.signatureHigh = parameter.timesignatureupper;
+                        timelineInfo.signatureLow = parameter.timesignaturelower;
                     }
                         break;
                 }
