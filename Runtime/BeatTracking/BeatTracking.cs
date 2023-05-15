@@ -72,7 +72,7 @@ namespace MazurkaGameKit.FMODTools
             musicInstance.setUserData(IntPtr.Zero);
             musicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
             musicInstance.release();
-            timelineHandle.Free();
+            if(timelineHandle.IsAllocated) timelineHandle.Free();
         }
         
         
