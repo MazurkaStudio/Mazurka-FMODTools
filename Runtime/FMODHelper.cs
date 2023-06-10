@@ -290,6 +290,7 @@ namespace MazurkaGameKit.FMODTools
             eventInstance.setParameterByName(parameter.Name, parameter.Value, ignoreKeepSpeed);
             eventInstance.start();
             eventInstance.release();
+            eventInstance.clearHandle();
         }
 
         private static void PlaySound_2D_OneShot(EventReference eventRef, ParamRef[] parameters, bool ignoreKeepSpeed = false)
@@ -301,6 +302,7 @@ namespace MazurkaGameKit.FMODTools
             }
             eventInstance.start();
             eventInstance.release();
+            eventInstance.clearHandle();
         }
 
 
@@ -311,6 +313,7 @@ namespace MazurkaGameKit.FMODTools
             eventInstance.setParameterByName(parameter.Name, parameter.Value, ignoreKeepSpeed);
             eventInstance.start();
             eventInstance.release();
+            eventInstance.clearHandle();
         }
 
         private static void PlaySound_3D_OneShot(EventReference eventRef, GameObject attachTo, ParamRef parameter, bool ignoreKeepSpeed = false)
@@ -320,6 +323,7 @@ namespace MazurkaGameKit.FMODTools
             eventInstance.setParameterByName(parameter.Name, parameter.Value, ignoreKeepSpeed);
             eventInstance.start();
             eventInstance.release();
+            eventInstance.clearHandle();
         }
 
         private static void PlaySound_3D_OneShot(EventReference eventRef, Vector3 position, ParamRef[] parameters, bool ignoreKeepSpeed = false)
@@ -333,7 +337,7 @@ namespace MazurkaGameKit.FMODTools
 
             eventInstance.start();
             eventInstance.release();
-
+            eventInstance.clearHandle();
         }
 
         private static void PlaySound_3D_OneShot(EventReference eventRef, GameObject attachTo, ParamRef[] parameters, bool ignoreKeepSpeed = false)
@@ -347,6 +351,7 @@ namespace MazurkaGameKit.FMODTools
 
             eventInstance.start();
             eventInstance.release();
+            eventInstance.clearHandle();
         }
         
         #endregion

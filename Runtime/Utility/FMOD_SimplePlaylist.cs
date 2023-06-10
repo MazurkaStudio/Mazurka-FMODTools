@@ -88,6 +88,8 @@ namespace MazurkaGameKit.FMODTools
             IsStoping = true;
             CurrentEventIndex = randomize ? GetRandomValue() : 0;
             currentEventInstance.stop(stopMode);
+            currentEventInstance.release();
+            currentEventInstance.clearHandle();
         }
 
         #endregion

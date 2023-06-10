@@ -272,6 +272,7 @@ public abstract class FMODAudioEmitter : MonoBehaviour, IFMODAudioEmitter
         OnSoundWillStopped(instance);
         instance.stop(stopMode);
         instance.release();
+        instance.clearHandle();
     }
 
     public virtual void PauseSound(EventInstance instance, bool value)
